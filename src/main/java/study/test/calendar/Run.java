@@ -32,9 +32,15 @@ public class Run{
 	private static LocalDate date= LocalDate.now();
 
 	public static void main (String[] args){
+		int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth()-1).getDayOfWeek().getValue() - 1;
+		int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth()-date.getDayOfMonth()).getDayOfWeek().getValue() - 1;
+		int thisMonthLength = date.lengthOfMonth();
+		int prevMonthLength = date.minusMonths(1).lengthOfMonth();
+		int nextMonthLength = date.plusMonths(1).lengthOfMonth();
+
 		printMonthAndYear();
 		printWeekDaysName();
-		printDayNumbers(THU_ID, SAT_ID,  NUMBERS31, NUMBERS30, NUMBERS30);
+		printDayNumbers(firstDayOfMonthWeekDayId, lastDayOfMonthWeekDayId,  NUMBERS31, NUMBERS30, NUMBERS30);
 	}
 
 	private static void printMonthAndYear(){
@@ -52,7 +58,6 @@ public class Run{
 		}
 		System.out.println();
 	}
-
 	private static DayOfWeek getDayOfWeek(int iter){
 		return date.minusDays((date.getDayOfWeek().getValue())-1-iter).getDayOfWeek();
 	}
@@ -65,7 +70,7 @@ public class Run{
 			}
 			else if (j >= dayNumbersArray.length){
 					printNextMonthDayNum(dayNumbersArray,nextMonthArr, j);
-				}	
+				}
 				else{
 					ifToday(dayNumbersArray, j);
 					if((((i+1) % 6) - line) == 0){
