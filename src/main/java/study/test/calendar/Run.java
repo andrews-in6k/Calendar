@@ -1,8 +1,11 @@
 package study.test.calendar;
 
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Run{
 
@@ -24,6 +27,8 @@ public class Run{
 	public static final int[] NUMBERS29 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 		16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};		
 
+	public static final int MAX_WEEK_DAYS = 7;
+
 	private static LocalDate date= LocalDate.now();
 
 	public static void main (String[] args){
@@ -37,15 +42,19 @@ public class Run{
 	}
 
 	public static void printWeekDaysName(){
-		for (int i = 0; i < WEEK_DAYS_STANDART.length; i++){
-			if (i > FRI_ID){
-				System.out.print("\u001b[31m" + WEEK_DAYS_STANDART[i] + " " + "\u001b[0m");
+		for (int i = 0; i < MAX_WEEK_DAYS; i++){
+			if (getDayOfWeek(i).equals(DayOfWeek.SUNDAY)||getDayOfWeek(i).equals(DayOfWeek.SATURDAY)){
+				System.out.print("\u001b[31m" + getDayOfWeek(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " " + "\u001b[0m");
 			}
 			else{
-				System.out.print(WEEK_DAYS_STANDART[i] + " ");
+				System.out.print(getDayOfWeek(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
 			}
 		}
 		System.out.println();
+	}
+
+	private static DayOfWeek getDayOfWeek(int iter){
+		return date.minusDays((date.getDayOfWeek().getValue())-1-iter).getDayOfWeek();
 	}
 
 	public static void printDayNumbers(int firstDayID, int lastDayID, int[] dayNumbersArray, int[] prevMonthArr, int[] nextMonthArr){
