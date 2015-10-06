@@ -1,5 +1,7 @@
 package study.test.calendar;
 
+
+import java.time.LocalDate;
 import java.util.Calendar;
 
 public class Run{
@@ -22,10 +24,16 @@ public class Run{
 	public static final int[] NUMBERS29 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 		16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};		
 
+	private static LocalDate date= LocalDate.now();
 
 	public static void main (String[] args){
+		printMonthAndYear();
 		printWeekDaysName();
 		printDayNumbers(THU_ID, SAT_ID,  NUMBERS31, NUMBERS30, NUMBERS30);
+	}
+
+	private static void printMonthAndYear(){
+		System.out.println(date.getMonth()+" "+date.getYear());
 	}
 
 	public static void printWeekDaysName(){
