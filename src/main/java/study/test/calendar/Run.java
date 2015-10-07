@@ -8,6 +8,11 @@ import java.util.Locale;
 
 public class Run{
 
+	public static final String SET_HOLYDAY_COLOR = "\u001b[31m";
+	public static final String SET_DAY_FROM_OTHER_MONTH_COLOR = "\u001b[01;38;05;252m";
+	public static final String SET_DEFAULT_COLOR = "\u001b[0m";
+	public static final String SET_CURRENT_DAY_ACCENTUATION_COLOR = "\u001b[42m";
+
 	public static final int MAX_WEEK_DAYS = 7;
 	public static final int WEEK_DAYS_SHIFT = 0;
 
@@ -22,11 +27,11 @@ public class Run{
 
 		int thisMonthLength = date.lengthOfMonth();
 		int prevMonthLength = date.minusMonths(1).lengthOfMonth();
-		int nextMonthLength = date.plusMonths(1).lengthOfMonth();
+//		int nextMonthLength = date.plusMonths(1).lengthOfMonth();
 
 		printMonthAndYear();
 		printWeekDaysName();
-		printDayNumbers(firstDayOfMonthWeekDayId, lastDayOfMonthWeekDayId,  thisMonthLength, prevMonthLength, nextMonthLength);
+		printDayNumbers(firstDayOfMonthWeekDayId, lastDayOfMonthWeekDayId,  thisMonthLength, prevMonthLength);
 	}
 
 	private static void printMonthAndYear(){
@@ -36,7 +41,8 @@ public class Run{
 	public static void printWeekDaysName(){
 		for (int i = 0; i < MAX_WEEK_DAYS; i++){
 			if (getDayOfWeek(i).equals(DayOfWeek.SUNDAY)||getDayOfWeek(i).equals(DayOfWeek.SATURDAY)){
-				System.out.print("\u001b[31m" + getDayOfWeek(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " " + "\u001b[0m");
+				System.out.print(SET_HOLYDAY_COLOR + getDayOfWeek(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
+				resetPrintFormat();
 			}
 			else{
 				System.out.print(getDayOfWeek(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
@@ -48,16 +54,16 @@ public class Run{
 		return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
 	}
 
-	public static void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength, int nextMonthLength){
+	public static void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength){
 		int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
 		for (int i = 0; i < calendarSize; i++){
 			int checkIfThisMonth = i - firstDayOfMonthWeekDayId + 1;
 			ifEndOfWeek(i);
-			if (checkIfThisMonth <= 0){
+			if (ifPrevMonth(checkIfThisMonth)){
 				printPrevOrNextMonthDayNum(prevMonthLength + checkIfThisMonth);
 			}
 			else
-				if(checkIfThisMonth > thisMonthLength){
+				if(ifNextMonth(checkIfThisMonth,thisMonthLength)){
 					printPrevOrNextMonthDayNum(checkIfThisMonth - thisMonthLength);
 				}
 				else{
@@ -73,23 +79,23 @@ public class Run{
 	}
 
 	private static void printPrevOrNextMonthDayNum(int result){
-		System.out.print("\u001b[01;38;05;252m");
+		System.out.print(SET_DAY_FROM_OTHER_MONTH_COLOR);
 		System.out.format("%3d ",result);
-		System.out.print("\u001b[0m");
+		resetPrintFormat();
 	}
 	private static void printWeekEnds(int iter){
-		System.out.print("\u001b[31m");
+		System.out.print(SET_HOLYDAY_COLOR);
 		System.out.format("%3d ",iter);
-		System.out.print("\u001b[0m");
+		resetPrintFormat();
 	}
 	private static void printWeekDays(int iter){
 		System.out.format("%3d ",iter);
-		System.out.print("\u001b[0m");
+		resetPrintFormat();
 	}
 
 	private static void ifToday(int iter){
 		if (iter == date.getDayOfMonth()){
-			System.out.print("\u001b[42m");
+			System.out.print(SET_CURRENT_DAY_ACCENTUATION_COLOR);
 		}
 	}
 
@@ -124,8 +130,18 @@ public class Run{
 		}
 	}
 	private static boolean ifHolyday(int checkIfThisMonth){
-		return (((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SATURDAY)||
-				((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SUNDAY));
+		DayOfWeek thisDayOfWeek = (date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek());
+		return ((thisDayOfWeek == DayOfWeek.SATURDAY)||
+				(thisDayOfWeek == DayOfWeek.SUNDAY));
+	}
+	private  static boolean ifPrevMonth(int checkIfThisMonth){
+		return checkIfThisMonth <= 0;
+	}
+	private static boolean ifNextMonth(int checkIfThisMonth,int thisMonthLength){
+		return checkIfThisMonth > thisMonthLength;
 	}
 
+	private static void resetPrintFormat(){
+		System.out.print(SET_DEFAULT_COLOR);
+	}
 }
