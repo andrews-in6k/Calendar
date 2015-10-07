@@ -9,6 +9,7 @@ import java.util.Locale;
 public class Run{
 
 	public static final int MAX_WEEK_DAYS = 7;
+	public static final int WEEK_DAYS_SHIFT = 0;
 
 	private static LocalDate date= LocalDate.now();
 
@@ -40,13 +41,13 @@ public class Run{
 		System.out.println();
 	}
 	private static DayOfWeek getDayOfWeek(int iter){
-		return date.minusDays((date.getDayOfWeek().getValue())-1-iter).getDayOfWeek();
+		return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
 	}
 
 	public static void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength, int nextMonthLength){
 		int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
 		for (int i = 0; i < calendarSize; i++){
-			int checkIfThisMonth = i - firstDayOfMonthWeekDayId + 1;
+			int checkIfThisMonth = i - firstDayOfMonthWeekDayId + 1 - WEEK_DAYS_SHIFT;
 			if (checkIfThisMonth <= 0){
 				printPrevOrNextMonthDayNum(prevMonthLength + checkIfThisMonth);
 			}
@@ -55,16 +56,17 @@ public class Run{
 					printPrevOrNextMonthDayNum(checkIfThisMonth - thisMonthLength);
 				}
 				else{
+					if ((i % 7) == 0){
+						System.out.println();
+					}
 					ifToday(checkIfThisMonth);
-					if((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SATURDAY){
+					if(((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SATURDAY)||
+							((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SUNDAY)){
 						 printWeekEnds(checkIfThisMonth);
-					}else if((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SUNDAY){
-							printWeekEnds(checkIfThisMonth);
-							System.out.println();
-						}
-						else{
-							 printWeekDays(checkIfThisMonth);
-						}
+					}
+					else{
+						printWeekDays(checkIfThisMonth);
+					}
 				}
 		}
 	}
