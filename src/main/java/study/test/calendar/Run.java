@@ -52,9 +52,7 @@ public class Run{
 		int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
 		for (int i = 0; i < calendarSize; i++){
 			int checkIfThisMonth = i - firstDayOfMonthWeekDayId + 1;
-			if (((i % 7) == 0)&&(i != 0)){
-				System.out.println();
-			}
+			ifEndOfWeek(i);
 			if (checkIfThisMonth <= 0){
 				printPrevOrNextMonthDayNum(prevMonthLength + checkIfThisMonth);
 			}
@@ -95,6 +93,7 @@ public class Run{
 			System.out.print("\u001b[42m");
 		}
 	}
+
 	private static int normalizeFirrstMonthDayWeekId (int firstDayOfMonthWeekDayId){
 		for (int i = 0;i < 2;){
 			firstDayOfMonthWeekDayId = Math.abs(firstDayOfMonthWeekDayId);
@@ -118,6 +117,12 @@ public class Run{
 			}
 		}
 		return lastDayOfMonthWeekDayId;
+	}
+
+	private  static void ifEndOfWeek(int iter){
+		if (((iter % 7) == 0)&&(iter != 0)){
+			System.out.println();
+		}
 	}
 
 }
