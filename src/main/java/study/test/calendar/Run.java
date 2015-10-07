@@ -17,20 +17,8 @@ public class Run{
 		int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
 		int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth()-date.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
 
-		for (int i = 0;i < 2;){
-			firstDayOfMonthWeekDayId = Math.abs(firstDayOfMonthWeekDayId);
-			lastDayOfMonthWeekDayId = Math.abs(lastDayOfMonthWeekDayId);
-			if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
-				firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId - MAX_WEEK_DAYS;
-			}
-			else
-				if (lastDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
-					lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId - MAX_WEEK_DAYS;
-				}
-				else {
-					i++;
-				}
-		}
+		firstDayOfMonthWeekDayId = normalizeFirrstMonthDayWeekId(firstDayOfMonthWeekDayId);
+		lastDayOfMonthWeekDayId = normalizeLastMonthDayWeekId(lastDayOfMonthWeekDayId);
 
 		int thisMonthLength = date.lengthOfMonth();
 		int prevMonthLength = date.minusMonths(1).lengthOfMonth();
@@ -106,6 +94,30 @@ public class Run{
 		if (iter == date.getDayOfMonth()){
 			System.out.print("\u001b[42m");
 		}
+	}
+	private static int normalizeFirrstMonthDayWeekId (int firstDayOfMonthWeekDayId){
+		for (int i = 0;i < 2;){
+			firstDayOfMonthWeekDayId = Math.abs(firstDayOfMonthWeekDayId);
+			if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
+				firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId - MAX_WEEK_DAYS;
+			}
+			else {
+				i++;
+			}
+		}
+		return firstDayOfMonthWeekDayId;
+	}
+	private static int normalizeLastMonthDayWeekId (int lastDayOfMonthWeekDayId){
+		for (int i = 0;i < 2;){
+			lastDayOfMonthWeekDayId = Math.abs(lastDayOfMonthWeekDayId);
+			if (lastDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
+				lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId - MAX_WEEK_DAYS;
+			}
+			else {
+				i++;
+			}
+		}
+		return lastDayOfMonthWeekDayId;
 	}
 
 }
