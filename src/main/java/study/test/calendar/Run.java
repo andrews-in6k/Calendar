@@ -11,7 +11,7 @@ public class Run{
 	public static final String SET_HOLYDAY_COLOR = "\u001b[31m";
 	public static final String SET_DAY_FROM_OTHER_MONTH_COLOR = "\u001b[01;38;05;252m";
 	public static final String SET_DEFAULT_COLOR = "\u001b[0m";
-	public static final String SET_CURRENT_DAY_ACCENTUATION_COLOR = "\u001b[42m";
+	public static final String SET_CURRENT_DAY_ACCENTUATION_COLOR = "\u001b[42;30m";
 
 	public static final int MAX_WEEK_DAYS = 7;
 	public static final int WEEK_DAYS_SHIFT = 0;
