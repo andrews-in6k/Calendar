@@ -40,7 +40,7 @@ public class Run{
 
 	public static void printWeekDaysName(){
 		for (int i = 0; i < MAX_WEEK_DAYS; i++){
-			if (getDayOfWeek(i).equals(DayOfWeek.SUNDAY)||getDayOfWeek(i).equals(DayOfWeek.SATURDAY)){
+			if (ifHolydayForWeekDaysNames(i)){
 				System.out.print(SET_HOLYDAY_COLOR + getDayOfWeek(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
 				resetPrintFormat();
 			}
@@ -52,6 +52,9 @@ public class Run{
 	}
 	private static DayOfWeek getDayOfWeek(int iter){
 		return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
+	}
+	private static boolean ifHolydayForWeekDaysNames(int iter){
+		return (getDayOfWeek(iter).equals(DayOfWeek.SUNDAY)||getDayOfWeek(iter).equals(DayOfWeek.SATURDAY));
 	}
 
 	public static void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength){
@@ -68,7 +71,7 @@ public class Run{
 				}
 				else{
 					ifToday(checkIfThisMonth);
-					if(ifHolyday(checkIfThisMonth)){
+					if(ifHolydayForDayNumbers(checkIfThisMonth)){
 						 printWeekEnds(checkIfThisMonth);
 					}
 					else{
@@ -129,10 +132,10 @@ public class Run{
 			System.out.println();
 		}
 	}
-	private static boolean ifHolyday(int checkIfThisMonth){
+	private static boolean ifHolydayForDayNumbers(int checkIfThisMonth){
 		DayOfWeek thisDayOfWeek = (date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek());
-		return ((thisDayOfWeek == DayOfWeek.SATURDAY)||
-				(thisDayOfWeek == DayOfWeek.SUNDAY));
+		return ((thisDayOfWeek.equals(DayOfWeek.SATURDAY))||
+				(thisDayOfWeek.equals(DayOfWeek.SUNDAY)));
 	}
 	private  static boolean ifPrevMonth(int checkIfThisMonth){
 		return checkIfThisMonth <= 0;
