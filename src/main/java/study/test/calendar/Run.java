@@ -50,12 +50,6 @@ public class Run{
 		}
 		System.out.println();
 	}
-	private static DayOfWeek getDayOfWeek(int iter){
-		return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
-	}
-	private static boolean ifHolydayForWeekDaysNames(int iter){
-		return (getDayOfWeek(iter).equals(DayOfWeek.SUNDAY)||getDayOfWeek(iter).equals(DayOfWeek.SATURDAY));
-	}
 
 	public static void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength){
 		int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
@@ -96,41 +90,8 @@ public class Run{
 		resetPrintFormat();
 	}
 
-	private static void ifToday(int iter){
-		if (iter == date.getDayOfMonth()){
-			System.out.print(SET_CURRENT_DAY_ACCENTUATION_COLOR);
-		}
-	}
-
-	private static int normalizeFirrstMonthDayWeekId (int firstDayOfMonthWeekDayId){
-		for (int i = 0;i < 2;){
-			firstDayOfMonthWeekDayId = Math.abs(firstDayOfMonthWeekDayId);
-			if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
-				firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId - MAX_WEEK_DAYS;
-			}
-			else {
-				i++;
-			}
-		}
-		return firstDayOfMonthWeekDayId;
-	}
-	private static int normalizeLastMonthDayWeekId (int lastDayOfMonthWeekDayId){
-		for (int i = 0;i < 2;){
-			lastDayOfMonthWeekDayId = Math.abs(lastDayOfMonthWeekDayId);
-			if (lastDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
-				lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId - MAX_WEEK_DAYS;
-			}
-			else {
-				i++;
-			}
-		}
-		return lastDayOfMonthWeekDayId;
-	}
-
-	private  static void ifEndOfWeek(int iter){
-		if (((iter % 7) == 0)&&(iter != 0)){
-			System.out.println();
-		}
+	private static boolean ifHolydayForWeekDaysNames(int iter){
+		return (getDayOfWeek(iter).equals(DayOfWeek.SUNDAY)||getDayOfWeek(iter).equals(DayOfWeek.SATURDAY));
 	}
 	private static boolean ifHolydayForDayNumbers(int checkIfThisMonth){
 		DayOfWeek thisDayOfWeek = (date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek());
@@ -142,6 +103,51 @@ public class Run{
 	}
 	private static boolean ifNextMonth(int checkIfThisMonth,int thisMonthLength){
 		return checkIfThisMonth > thisMonthLength;
+	}
+	private static void ifToday(int iter){
+		if (iter == date.getDayOfMonth()){
+			System.out.print(SET_CURRENT_DAY_ACCENTUATION_COLOR);
+		}
+	}
+	private  static void ifEndOfWeek(int iter){
+		if (((iter % 7) == 0)&&(iter != 0)){
+			System.out.println();
+		}
+	}
+
+	private static DayOfWeek getDayOfWeek(int iter){
+		return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
+	}
+
+	private static int normalizeFirrstMonthDayWeekId (int firstDayOfMonthWeekDayId){
+		for (int i = 0;i < 1;){
+			if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
+				firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId - MAX_WEEK_DAYS;
+			}
+			else
+				if(firstDayOfMonthWeekDayId < 0){
+					firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId + MAX_WEEK_DAYS;
+				}
+				else {
+					i++;
+				}
+		}
+		return firstDayOfMonthWeekDayId;
+	}
+	private static int normalizeLastMonthDayWeekId (int lastDayOfMonthWeekDayId){
+		for (int i = 0;i < 1;){
+			if (lastDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
+				lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId - MAX_WEEK_DAYS;
+			}
+			else
+				if(lastDayOfMonthWeekDayId < 0){
+					lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId + MAX_WEEK_DAYS;
+				}
+				else {
+					i++;
+				}
+		}
+		return lastDayOfMonthWeekDayId;
 	}
 
 	private static void resetPrintFormat(){
