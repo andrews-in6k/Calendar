@@ -19,22 +19,15 @@ public class Run{
 	private static LocalDate date= LocalDate.now();
 
 	public static void main (String[] args){
-		int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
-		int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth()-date.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
-
-		firstDayOfMonthWeekDayId = normalizeFirrstMonthDayWeekId(firstDayOfMonthWeekDayId);
-		lastDayOfMonthWeekDayId = normalizeLastMonthDayWeekId(lastDayOfMonthWeekDayId);
-
 		int thisMonthLength = date.lengthOfMonth();
 		int prevMonthLength = date.minusMonths(1).lengthOfMonth();
-//		int nextMonthLength = date.plusMonths(1).lengthOfMonth();
 
 		printMonthAndYear();
 		printWeekDaysName();
-		printDayNumbers(firstDayOfMonthWeekDayId, lastDayOfMonthWeekDayId,  thisMonthLength, prevMonthLength);
+		printDayNumbers(initFirstDayOfMonthWeekDayId(), initFirstDayOfMonthWeekDayId(),  thisMonthLength, prevMonthLength);
 	}
 
-	private static void printMonthAndYear(){
+	public static void printMonthAndYear(){
 		System.out.println(date.getMonth() + " " + date.getYear());
 	}
 
@@ -119,6 +112,14 @@ public class Run{
 		return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
 	}
 
+	private static int initFirstDayOfMonthWeekDayId(){
+		int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+		return normalizeFirrstMonthDayWeekId(firstDayOfMonthWeekDayId);
+	}
+	private static int initLastDayOfMonthWeekDayId(){
+		int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth()-date.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+		return normalizeLastMonthDayWeekId(lastDayOfMonthWeekDayId);
+	}
 	private static int normalizeFirrstMonthDayWeekId (int firstDayOfMonthWeekDayId){
 		for (int i = 0;i < 1;){
 			if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
