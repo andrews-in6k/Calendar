@@ -62,8 +62,7 @@ public class Run{
 				}
 				else{
 					ifToday(checkIfThisMonth);
-					if(((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SATURDAY)||
-							((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SUNDAY)){
+					if(ifHolyday(checkIfThisMonth)){
 						 printWeekEnds(checkIfThisMonth);
 					}
 					else{
@@ -123,6 +122,10 @@ public class Run{
 		if (((iter % 7) == 0)&&(iter != 0)){
 			System.out.println();
 		}
+	}
+	private static boolean ifHolyday(int checkIfThisMonth){
+		return (((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SATURDAY)||
+				((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SUNDAY));
 	}
 
 }
