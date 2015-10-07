@@ -14,8 +14,24 @@ public class Run{
 	private static LocalDate date= LocalDate.now();
 
 	public static void main (String[] args){
-		int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth()-1).getDayOfWeek().getValue() - 1;
-		int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth()-date.getDayOfMonth()).getDayOfWeek().getValue() - 1;
+		int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+		int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth()-date.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+
+		for (int i = 0;i < 2;){
+			firstDayOfMonthWeekDayId = Math.abs(firstDayOfMonthWeekDayId);
+			lastDayOfMonthWeekDayId = Math.abs(lastDayOfMonthWeekDayId);
+			if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
+				firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId - MAX_WEEK_DAYS;
+			}
+			else
+				if (lastDayOfMonthWeekDayId >= MAX_WEEK_DAYS){
+					lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId - MAX_WEEK_DAYS;
+				}
+				else {
+					i++;
+				}
+		}
+
 		int thisMonthLength = date.lengthOfMonth();
 		int prevMonthLength = date.minusMonths(1).lengthOfMonth();
 		int nextMonthLength = date.plusMonths(1).lengthOfMonth();
@@ -26,7 +42,7 @@ public class Run{
 	}
 
 	private static void printMonthAndYear(){
-		System.out.println(date.getMonth()+" "+date.getYear());
+		System.out.println(date.getMonth() + " " + date.getYear());
 	}
 
 	public static void printWeekDaysName(){
@@ -47,7 +63,10 @@ public class Run{
 	public static void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength, int nextMonthLength){
 		int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
 		for (int i = 0; i < calendarSize; i++){
-			int checkIfThisMonth = i - firstDayOfMonthWeekDayId + 1 - WEEK_DAYS_SHIFT;
+			int checkIfThisMonth = i - firstDayOfMonthWeekDayId + 1;
+			if (((i % 7) == 0)&&(i != 0)){
+				System.out.println();
+			}
 			if (checkIfThisMonth <= 0){
 				printPrevOrNextMonthDayNum(prevMonthLength + checkIfThisMonth);
 			}
@@ -56,9 +75,6 @@ public class Run{
 					printPrevOrNextMonthDayNum(checkIfThisMonth - thisMonthLength);
 				}
 				else{
-					if ((i % 7) == 0){
-						System.out.println();
-					}
 					ifToday(checkIfThisMonth);
 					if(((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SATURDAY)||
 							((date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek()) == DayOfWeek.SUNDAY)){
