@@ -19,12 +19,13 @@ public class Run{
 	private static LocalDate date= LocalDate.now();
 
 	public static void main (String[] args){
+
 		int thisMonthLength = date.lengthOfMonth();
 		int prevMonthLength = date.minusMonths(1).lengthOfMonth();
 
 		printMonthAndYear();
 		printWeekDaysName();
-		printDayNumbers(initFirstDayOfMonthWeekDayId(), initFirstDayOfMonthWeekDayId(),  thisMonthLength, prevMonthLength);
+		printDayNumbers(initFirstDayOfMonthWeekDayId(), initLastDayOfMonthWeekDayId(),  thisMonthLength, prevMonthLength);
 	}
 
 	public static void printMonthAndYear(){
