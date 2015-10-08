@@ -88,7 +88,11 @@ public class MonthCalendar {
 
     private void initDateForOutput(){
         int weekDaysShift = sourceDate.minusDays(sourceDate.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
-        weekDaysShift = weekDaysShift % MAX_WEEK_DAYS;
+        if ((weekDaysShift >= 0) || ((weekDaysShift % MAX_WEEK_DAYS) == 0)) {
+            weekDaysShift = weekDaysShift % MAX_WEEK_DAYS;
+        }else {
+            weekDaysShift = MAX_WEEK_DAYS - Math.abs(weekDaysShift % MAX_WEEK_DAYS);
+        }
         int dateChange = sourceDate.getDayOfMonth() - 1 + weekDaysShift;
         dateForOutput = sourceDate.minusDays(dateChange);
     }
