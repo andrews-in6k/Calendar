@@ -73,19 +73,19 @@ public class MonthCalendar {
 //        Light version
         System.out.println();
         initDateForOutput();
-        int i = 0;
-        while(i < 35){
+        for(int i = 0; isNotNextMonthFirstWeekEnd(i) ;i++){
             if(isEndOfWeek(i)){
                 System.out.println();
             }
             System.out.format("%3d ",dateForOutput.plusDays(i).getDayOfMonth());
-            i++;
         }
 //
 //
 //
     }
-
+//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     private void initDateForOutput(){
         int weekDaysShift = sourceDate.minusDays(sourceDate.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
         if ((weekDaysShift >= 0) || ((weekDaysShift % MAX_WEEK_DAYS) == 0)) {
@@ -95,6 +95,11 @@ public class MonthCalendar {
         }
         int dateChange = sourceDate.getDayOfMonth() - 1 + weekDaysShift;
         dateForOutput = sourceDate.minusDays(dateChange);
+    }
+
+    private boolean isNotNextMonthFirstWeekEnd(int i) {
+        return !((dateForOutput.plusDays(i).getMonthValue() == sourceDate.plusMonths(1).getMonthValue()) &&
+                ((i % MAX_WEEK_DAYS) == 0 ));
     }
 
 //**********************************************************************************************
