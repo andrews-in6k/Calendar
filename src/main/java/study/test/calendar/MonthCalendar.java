@@ -9,10 +9,11 @@ import java.util.Locale;
  * Created by employee on 10/8/15.
  */
 public class MonthCalendar {
-    public static final String SET_HOLIDAY_COLOR = "\u001b[31m";
-    public static final String SET_DAY_FROM_OTHER_MONTH_COLOR = "\u001b[34m";
-    public static final String SET_DEFAULT_COLOR = "\u001b[0m";
-    public static final String SET_CURRENT_DAY_ACCENTUATION_COLOR = "\u001b[42;30m";
+
+    public static final String[] SET_HOLIDAY_COLOR = {"\u001b[31m", "red"};
+    public static final String[] SET_DAY_FROM_OTHER_MONTH_COLOR = {"\u001b[34m", "blue"};
+    public static final String[] SET_DEFAULT_COLOR = {"\u001b[0m", "black"};
+    public static final String[] SET_CURRENT_DAY_ACCENTUATION_COLOR = {"\u001b[42;30m","green"};
 
     public static final int MAX_WEEK_DAYS = 7;
     public static final int WEEK_DAYS_SHIFT = 0;
@@ -20,58 +21,47 @@ public class MonthCalendar {
     private LocalDate sourceDate = LocalDate.now();
     private LocalDate dateForOutput;
 
+    ConsoleCalendarPrinter consoleCalendarPrinter = new ConsoleCalendarPrinter(SET_DEFAULT_COLOR);
+    HTMLCalendarPrinter htmlCalendarPrinter = new HTMLCalendarPrinter();
+
     MonthCalendar(LocalDate date) {
         this.sourceDate = date;
     }
 
     public void printCalendar() {
-        printMonthAndYear();
-        printWeekDaysNames();
-        printDayNumbers();
+        consoleCalendarPrinter.printMonthAndYear(sourceDate);
+        printWeekDaysNames(consoleCalendarPrinter);
+        printDayNumbers(consoleCalendarPrinter);
+        htmlCalendarPrinter.printMonthAndYear(sourceDate);
     }
 
-    private void printMonthAndYear() {
-        System.out.println(sourceDate.getMonth() + " " + sourceDate.getYear());
-    }
-
-    private void printWeekDaysNames() {
+    private void printWeekDaysNames(CalendarPrinter calendarPrinter) {
         for (int weekDayIndex = 0; weekDayIndex < MAX_WEEK_DAYS; weekDayIndex++) {
             if (isHolidayName(weekDayIndex)) {
-                printShortWeekDaysName(weekDayIndex, SET_HOLIDAY_COLOR);
+                calendarPrinter.printShortWeekDaysName(getShortWeekdayName(weekDayIndex), SET_HOLIDAY_COLOR);
             } else {
-                printShortWeekDaysName(weekDayIndex, SET_DEFAULT_COLOR);
+                calendarPrinter.printShortWeekDaysName(getShortWeekdayName(weekDayIndex), SET_DEFAULT_COLOR);
             }
         }
         System.out.println();
     }
 
-    private void printDayNumbers() {
+    private void printDayNumbers(CalendarPrinter calendarPrinter) {
         initDateForOutput();
         for (int dayIndex = 0; isNotNextMonthFirstWeekEnd(dayIndex); dayIndex++) {
             if (isEndOfWeek(dayIndex)) {
                 System.out.println();
             }
             if (isPrevMonth(dayIndex)) {
-                printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
+                calendarPrinter.printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
             }
             if (isCurrentMonth(dayIndex)) {
-                printCurrentMonthDayNumbers(dayIndex);
+                printCurrentMonthDayNumbers(dayIndex, calendarPrinter);
             }
             if (isNextMonth(dayIndex)) {
-                printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
+                calendarPrinter.printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
             }
         }
-    }
-
-    private void printDayNumber(int dayNumber, String setFormat) {
-        System.out.print(setFormat);
-        System.out.format("%3d ", dayNumber);
-        resetPrintFormat();
-    }
-
-    private void printShortWeekDaysName(int weekdayIndex, String format) {
-        System.out.print(format + getWeekdayName(weekdayIndex).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
-        resetPrintFormat();
     }
 
     private void initDateForOutput() {
@@ -116,14 +106,14 @@ public class MonthCalendar {
         return monthDay == sourceDate.getDayOfMonth();
     }
 
-    private void printCurrentMonthDayNumbers(int dayIndex) {
+    private void printCurrentMonthDayNumbers(int dayIndex, CalendarPrinter calendarPrinter) {
         if (isToday(getCurrentDayNumber(dayIndex).getDayOfMonth())) {
-            setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
+            consoleCalendarPrinter.setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
         }
         if (isHolidayNumber(dayIndex)) {
-            printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_HOLIDAY_COLOR);
+            calendarPrinter.printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_HOLIDAY_COLOR);
         } else {
-            printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DEFAULT_COLOR);
+            calendarPrinter.printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DEFAULT_COLOR);
         }
     }
 
@@ -153,11 +143,8 @@ public class MonthCalendar {
         return sourceDate.minusDays((sourceDate.getDayOfWeek().getValue()) - 1 - indexNumber + WEEK_DAYS_SHIFT).getDayOfWeek();
     }
 
-    private void setPrintFormat(String format) {
-        System.out.print(format);
+    private String getShortWeekdayName(int weekdayIndex) {
+        return getWeekdayName(weekdayIndex).getDisplayName(TextStyle.SHORT, Locale.CANADA);
     }
 
-    private void resetPrintFormat() {
-        System.out.print(SET_DEFAULT_COLOR);
-    }
 }
