@@ -71,23 +71,25 @@ public class MonthCalendar {
 //
 //
 //        Light version
-//        System.out.println();
-//        initDateForOutput();
-//        int ii = 0;
-//        while(ii < 35){
-//            if(isEndOfWeek(ii)){
-//                System.out.println();
-//            }
-//            System.out.format("%3d ",dateForOutput.plusDays(ii).getDayOfMonth());
-//            ii++;
-//        }
+        System.out.println();
+        initDateForOutput();
+        int i = 0;
+        while(i < 35){
+            if(isEndOfWeek(i)){
+                System.out.println();
+            }
+            System.out.format("%3d ",dateForOutput.plusDays(i).getDayOfMonth());
+            i++;
+        }
 //
 //
 //
     }
 
     private void initDateForOutput(){
-        int dateChange = sourceDate.getDayOfMonth() + sourceDate.minusDays(sourceDate.getDayOfMonth()-1).getDayOfWeek().getValue()-2;
+        int weekDaysShift = sourceDate.minusDays(sourceDate.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+        weekDaysShift = weekDaysShift % MAX_WEEK_DAYS;
+        int dateChange = sourceDate.getDayOfMonth() - 1 + weekDaysShift;
         dateForOutput = sourceDate.minusDays(dateChange);
     }
 
