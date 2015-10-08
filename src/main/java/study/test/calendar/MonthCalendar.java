@@ -20,11 +20,11 @@ public class MonthCalendar {
     private LocalDate sourceDate = LocalDate.now();
     private LocalDate dateForOutput;
 
-    MonthCalendar(LocalDate date){
+    MonthCalendar(LocalDate date) {
         this.sourceDate = date;
     }
 
-    public void printCalendar(){
+    public void printCalendar() {
         printMonthAndYear();
         printWeekDaysNames();
         printDayNumbers();
@@ -35,172 +35,122 @@ public class MonthCalendar {
     }
 
     private void printWeekDaysNames() {
-        for (int i = 0; i < MAX_WEEK_DAYS; i++) {
-            if (isHolidayName(i)) {
-                printShortWeekDaysName(i, SET_HOLIDAY_COLOR);
+        for (int weekDayIndex = 0; weekDayIndex < MAX_WEEK_DAYS; weekDayIndex++) {
+            if (isHolidayName(weekDayIndex)) {
+                printShortWeekDaysName(weekDayIndex, SET_HOLIDAY_COLOR);
             } else {
-                printShortWeekDaysName(i, SET_DEFAULT_COLOR);
+                printShortWeekDaysName(weekDayIndex, SET_DEFAULT_COLOR);
             }
         }
         System.out.println();
     }
 
     private void printDayNumbers() {
-        int firstDayOfMonthWeekDayId = initFirstDayOfMonthWeekDayId();
-        int lastDayOfMonthWeekDayId = initLastDayOfMonthWeekDayId();
-        int thisMonthLength = sourceDate.lengthOfMonth();
-        int prevMonthLength = sourceDate.minusMonths(1).lengthOfMonth();
-        int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
-
-        for (int i = 0; i < calendarSize; i++) {
-            int dayNumberRelativeToThisMonth = i - firstDayOfMonthWeekDayId + 1;
-
-            if(isEndOfWeek(i)){
-                System.out.println();
-            }
-            if (isPrevMonth(dayNumberRelativeToThisMonth)) {
-                printDayNumber(prevMonthLength + dayNumberRelativeToThisMonth, SET_DAY_FROM_OTHER_MONTH_COLOR);
-            }
-            if (isCurrentMonth(dayNumberRelativeToThisMonth, thisMonthLength)) {
-                printCurrentMonthDayNumbers(dayNumberRelativeToThisMonth);
-            }
-            if (isNextMonth(dayNumberRelativeToThisMonth, thisMonthLength)) {
-                printDayNumber(dayNumberRelativeToThisMonth - thisMonthLength, SET_DAY_FROM_OTHER_MONTH_COLOR);
-            }
-        }
-//
-//
-//        Light version
-        System.out.println();
         initDateForOutput();
-        for(int i = 0; isNotNextMonthFirstWeekEnd(i) ;i++){
-            if(isEndOfWeek(i)){
+        for (int dayIndex = 0; isNotNextMonthFirstWeekEnd(dayIndex); dayIndex++) {
+            if (isEndOfWeek(dayIndex)) {
                 System.out.println();
             }
-            System.out.format("%3d ",dateForOutput.plusDays(i).getDayOfMonth());
+            if (isPrevMonth(dayIndex)) {
+                printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
+            }
+            if (isCurrentMonth(dayIndex)) {
+                printCurrentMonthDayNumbers(dayIndex);
+            }
+            if (isNextMonth(dayIndex)) {
+                printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
+            }
         }
-//
-//
-//
-    }
-//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    private void initDateForOutput(){
-        int weekDaysShift = sourceDate.minusDays(sourceDate.getDayOfMonth()-1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
-        if ((weekDaysShift >= 0) || ((weekDaysShift % MAX_WEEK_DAYS) == 0)) {
-            weekDaysShift = weekDaysShift % MAX_WEEK_DAYS;
-        }else {
-            weekDaysShift = MAX_WEEK_DAYS - Math.abs(weekDaysShift % MAX_WEEK_DAYS);
-        }
-        int dateChange = sourceDate.getDayOfMonth() - 1 + weekDaysShift;
-        dateForOutput = sourceDate.minusDays(dateChange);
     }
 
-    private boolean isNotNextMonthFirstWeekEnd(int i) {
-        return !((dateForOutput.plusDays(i).getMonthValue() == sourceDate.plusMonths(1).getMonthValue()) &&
-                ((i % MAX_WEEK_DAYS) == 0 ));
-    }
-
-//**********************************************************************************************
-//**********************************************************************************************
-//**********************************************************************************************
     private void printDayNumber(int dayNumber, String setFormat) {
         System.out.print(setFormat);
         System.out.format("%3d ", dayNumber);
         resetPrintFormat();
     }
 
-    private boolean isHolidayName(int weekdayNumber) {
-        return isWeekend(getDayOfWeekName(weekdayNumber));
+    private void printShortWeekDaysName(int weekdayIndex, String format) {
+        System.out.print(format + getWeekdayName(weekdayIndex).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
+        resetPrintFormat();
+    }
+
+    private void initDateForOutput() {
+        int sourceDateShiftRelativeToDayOfMonth = sourceDate.getDayOfMonth() - 1 + calculateSourceDateShift();
+        dateForOutput = sourceDate.minusDays(sourceDateShiftRelativeToDayOfMonth);
     }
 
     private boolean isWeekend(DayOfWeek dayOfWeekName) {
         return dayOfWeekName.equals(DayOfWeek.SUNDAY) || dayOfWeekName.equals(DayOfWeek.SATURDAY);
     }
 
-    private boolean isHolidayNumber(int monthDay) {
-        return isWeekend(getCurrentDayOfWeek(monthDay));
+    private boolean isHolidayName(int weekdayIndex) {
+        return isWeekend(getWeekdayName(weekdayIndex));
     }
 
-    private boolean isPrevMonth(int checkIfThisMonth) {
-        return checkIfThisMonth <= 0;
+    private boolean isHolidayNumber(int dayIndex) {
+        return isWeekend(getCurrentDayNumber(dayIndex).getDayOfWeek());
     }
 
-    private boolean isCurrentMonth(int dayNumberRelativeToThisMonth, int thisMonthLength){
-        return !(isPrevMonth(dayNumberRelativeToThisMonth)) && !(isNextMonth(dayNumberRelativeToThisMonth, thisMonthLength));
+    private boolean isPrevMonth(int dayIndex) {
+        return getCurrentDayNumber(dayIndex).getMonthValue() == sourceDate.minusMonths(1).getMonthValue();
     }
 
-    private boolean isNextMonth(int checkIfThisMonth, int thisMonthLength) {
-        return checkIfThisMonth > thisMonthLength;
+    private boolean isNextMonth(int dayIndex) {
+        return getCurrentDayNumber(dayIndex).getMonthValue() == sourceDate.plusMonths(1).getMonthValue();
     }
 
-    private boolean isEndOfWeek(int dayNumberIndex) {
-        return ((dayNumberIndex % MAX_WEEK_DAYS) == 0) && (dayNumberIndex != 0);
+    private boolean isCurrentMonth(int dayIndex) {
+        return !(isPrevMonth(dayIndex)) && !(isNextMonth(dayIndex));
     }
 
-    private void printCurrentMonthDayNumbers(int dayNumberRelativeToThisMonth) {
-        if (ifToday(dayNumberRelativeToThisMonth)) {
-            setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
-        }
-        if (isHolidayNumber(dayNumberRelativeToThisMonth)) {
-            printDayNumber(dayNumberRelativeToThisMonth, SET_HOLIDAY_COLOR);
-        } else {
-            printDayNumber(dayNumberRelativeToThisMonth, SET_DEFAULT_COLOR);
-        }
+    private boolean isNotNextMonthFirstWeekEnd(int dayIndex) {
+        return !((getCurrentDayNumber(dayIndex).getMonthValue() == sourceDate.plusMonths(1).getMonthValue()) &&
+                ((causeToWeekdayId(dayIndex)) == 0));
     }
 
-    private boolean ifToday(int monthDay) {
+    private boolean isEndOfWeek(int dayIndex) {
+        return ((causeToWeekdayId(dayIndex)) == 0) && (dayIndex != 0);
+    }
+
+    private boolean isToday(int monthDay) {
         return monthDay == sourceDate.getDayOfMonth();
     }
 
-    private void printShortWeekDaysName(int indexNumber, String format) {
-        System.out.print(format + getDayOfWeekName(indexNumber).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
-        resetPrintFormat();
+    private void printCurrentMonthDayNumbers(int dayIndex) {
+        if (isToday(getCurrentDayNumber(dayIndex).getDayOfMonth())) {
+            setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
+        }
+        if (isHolidayNumber(dayIndex)) {
+            printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_HOLIDAY_COLOR);
+        } else {
+            printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DEFAULT_COLOR);
+        }
     }
 
-    private DayOfWeek getDayOfWeekName(int indexNumber) {
+    private int calculateSourceDateShift() {
+        int sourceDateShift = getFirstMonthWeekdayId() + WEEK_DAYS_SHIFT;
+        if ((sourceDateShift >= 0) || (causeToWeekdayId(sourceDateShift) == 0)) {
+            sourceDateShift = causeToWeekdayId(sourceDateShift);
+        } else {
+            sourceDateShift = MAX_WEEK_DAYS - Math.abs(causeToWeekdayId(sourceDateShift));
+        }
+        return sourceDateShift;
+    }
+
+    private int causeToWeekdayId(int increasedWeekdayIndex) {
+        return increasedWeekdayIndex % MAX_WEEK_DAYS;
+    }
+
+    private int getFirstMonthWeekdayId() {
+        return sourceDate.minusDays(sourceDate.getDayOfMonth() - 1).getDayOfWeek().getValue() - 1;
+    }
+
+    private LocalDate getCurrentDayNumber(int dayIndex) {
+        return dateForOutput.plusDays(dayIndex);
+    }
+
+    private DayOfWeek getWeekdayName(int indexNumber) {
         return sourceDate.minusDays((sourceDate.getDayOfWeek().getValue()) - 1 - indexNumber + WEEK_DAYS_SHIFT).getDayOfWeek();
-    }
-
-    private DayOfWeek getCurrentDayOfWeek(int monthDay) {
-        return sourceDate.minusDays(sourceDate.getDayOfMonth() - monthDay).getDayOfWeek();
-    }
-
-    private int initFirstDayOfMonthWeekDayId() {
-        int firstDayOfMonthWeekDayId = getCurrentDayOfWeek(1).getValue() - 1 + WEEK_DAYS_SHIFT;
-        return normalizeFirrstMonthDayWeekId(firstDayOfMonthWeekDayId);
-    }
-
-    private int initLastDayOfMonthWeekDayId() {
-        int lastDayOfMonthWeekDayId = sourceDate.plusDays(sourceDate.lengthOfMonth() - sourceDate.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
-        return normalizeLastMonthDayWeekId(lastDayOfMonthWeekDayId);
-    }
-
-    private int normalizeFirrstMonthDayWeekId(int firstDayOfMonthWeekDayId) {
-        for (int i = 0; i < 1; ) {
-            if (firstDayOfMonthWeekDayId >= MAX_WEEK_DAYS) {
-                firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId - MAX_WEEK_DAYS;
-            } else if (firstDayOfMonthWeekDayId < 0) {
-                firstDayOfMonthWeekDayId = firstDayOfMonthWeekDayId + MAX_WEEK_DAYS;
-            } else {
-                i++;
-            }
-        }
-        return firstDayOfMonthWeekDayId;
-    }
-
-    private int normalizeLastMonthDayWeekId(int lastDayOfMonthWeekDayId) {
-        for (int i = 0; i < 1; ) {
-            if (lastDayOfMonthWeekDayId >= MAX_WEEK_DAYS) {
-                lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId - MAX_WEEK_DAYS;
-            } else if (lastDayOfMonthWeekDayId < 0) {
-                lastDayOfMonthWeekDayId = lastDayOfMonthWeekDayId + MAX_WEEK_DAYS;
-            } else {
-                i++;
-            }
-        }
-        return lastDayOfMonthWeekDayId;
     }
 
     private void setPrintFormat(String format) {
