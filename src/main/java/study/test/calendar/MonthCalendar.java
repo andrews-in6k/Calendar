@@ -9,8 +9,8 @@ import java.util.Locale;
  * Created by employee on 10/8/15.
  */
 public class MonthCalendar {
-    public static final String SET_HOLYDAY_COLOR = "\u001b[31m";
-    public static final String SET_DAY_FROM_OTHER_MONTH_COLOR = "\u001b[01;38;05;252m";
+    public static final String SET_HOLIDAY_COLOR = "\u001b[31m";
+    public static final String SET_DAY_FROM_OTHER_MONTH_COLOR = "\u001b[34m";
     public static final String SET_DEFAULT_COLOR = "\u001b[0m";
     public static final String SET_CURRENT_DAY_ACCENTUATION_COLOR = "\u001b[42;30m";
 
@@ -24,12 +24,9 @@ public class MonthCalendar {
     }
 
     public void printCalendar(){
-        int thisMonthLength = date.lengthOfMonth();
-        int prevMonthLength = date.minusMonths(1).lengthOfMonth();
-
         printMonthAndYear();
         printWeekDaysName();
-        printDayNumbers(initFirstDayOfMonthWeekDayId(), initLastDayOfMonthWeekDayId(), thisMonthLength, prevMonthLength);
+        printDayNumbers();
     }
 
     private void printMonthAndYear() {
@@ -38,8 +35,8 @@ public class MonthCalendar {
 
     private void printWeekDaysName() {
         for (int i = 0; i < MAX_WEEK_DAYS; i++) {
-            if (isItHolydayWeekDaysNamer(i)) {
-                System.out.print(SET_HOLYDAY_COLOR + getDayOfWeekName(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
+            if (isHolidayName(i)) {
+                System.out.print(SET_HOLIDAY_COLOR + getDayOfWeekName(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
                 resetPrintFormat();
             } else {
                 System.out.print(getDayOfWeekName(i).getDisplayName(TextStyle.SHORT, Locale.CANADA) + " ");
@@ -48,72 +45,71 @@ public class MonthCalendar {
         System.out.println();
     }
 
-    private void printDayNumbers(int firstDayOfMonthWeekDayId, int lastDayOfMonthWeekDayId, int thisMonthLength, int prevMonthLength) {
+    private void printDayNumbers() {
+        int firstDayOfMonthWeekDayId = initFirstDayOfMonthWeekDayId();
+        int lastDayOfMonthWeekDayId = initLastDayOfMonthWeekDayId();
+        int thisMonthLength = date.lengthOfMonth();
+        int prevMonthLength = date.minusMonths(1).lengthOfMonth();
         int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
+
         for (int i = 0; i < calendarSize; i++) {
             int dayNumberRelativeToThisMonth = i - firstDayOfMonthWeekDayId + 1;
-            ifEndOfWeek(i);
-            ifPrevMonth(dayNumberRelativeToThisMonth, prevMonthLength);
-            ifNextMonth(dayNumberRelativeToThisMonth, thisMonthLength);
-            ifThisMonth(dayNumberRelativeToThisMonth, thisMonthLength);
+
+            if(isEndOfWeek(i)){
+                System.out.println();
+            }
+            if (isPrevMonth(dayNumberRelativeToThisMonth)) {
+                printDayNumber(prevMonthLength + dayNumberRelativeToThisMonth, SET_DAY_FROM_OTHER_MONTH_COLOR);
+            }
+            if (isCurrentMonth(dayNumberRelativeToThisMonth, thisMonthLength)) {
+                printCurrentMonthDayNumbers(dayNumberRelativeToThisMonth);
+            }
+            if (isNextMonth(dayNumberRelativeToThisMonth, thisMonthLength)) {
+                printDayNumber(dayNumberRelativeToThisMonth - thisMonthLength, SET_DAY_FROM_OTHER_MONTH_COLOR);
+            }
         }
     }
 
-    private void printPrevOrNextMonthDayNum(int result) {
-        System.out.print(SET_DAY_FROM_OTHER_MONTH_COLOR);
-        System.out.format("%3d ", result);
+    private void printDayNumber(int dayNumber, String setFormat) {
+        System.out.print(setFormat);
+        System.out.format("%3d ", dayNumber);
         resetPrintFormat();
     }
 
-    private void printWeekEnds(int iter) {
-        System.out.print(SET_HOLYDAY_COLOR);
-        System.out.format("%3d ", iter);
-        resetPrintFormat();
+    private boolean isHolidayName(int weekdayNumber) {
+        return isWeekend(getDayOfWeekName(weekdayNumber));
     }
 
-    private void printWeekDays(int iter) {
-        System.out.format("%3d ", iter);
-        resetPrintFormat();
+    private boolean isWeekend(DayOfWeek dayOfWeekName) {
+        return dayOfWeekName.equals(DayOfWeek.SUNDAY) || dayOfWeekName.equals(DayOfWeek.SATURDAY);
     }
 
-    private boolean isItHolydayWeekDaysNamer(int iter) {
-        return (getDayOfWeekName(iter).equals(DayOfWeek.SUNDAY) || getDayOfWeekName(iter).equals(DayOfWeek.SATURDAY));
+    private boolean isHolidayNumber(int monthDay) {
+        return isWeekend(getCurrentDayOfWeek(monthDay));
     }
 
-    private boolean isItHolydayDayNumber(int checkIfThisMonth) {
-        DayOfWeek thisDayOfWeek = (date.minusDays(date.getDayOfMonth() - checkIfThisMonth).getDayOfWeek());
-        return ((thisDayOfWeek.equals(DayOfWeek.SATURDAY)) ||
-                (thisDayOfWeek.equals(DayOfWeek.SUNDAY)));
-    }
-
-    private boolean isItPrevMonth(int checkIfThisMonth) {
+    private boolean isPrevMonth(int checkIfThisMonth) {
         return checkIfThisMonth <= 0;
     }
 
-    private boolean isItNextMonth(int checkIfThisMonth, int thisMonthLength) {
+    private boolean isCurrentMonth(int dayNumberRelativeToThisMonth, int thisMonthLength){
+        return !(isPrevMonth(dayNumberRelativeToThisMonth)) && !(isNextMonth(dayNumberRelativeToThisMonth, thisMonthLength));
+    }
+
+    private boolean isNextMonth(int checkIfThisMonth, int thisMonthLength) {
         return checkIfThisMonth > thisMonthLength;
     }
 
-    private void ifEndOfWeek(int iter) {
-        if (((iter % 7) == 0) && (iter != 0)) {
-            System.out.println();
-        }
+    private boolean isEndOfWeek(int iter) {
+        return ((iter % MAX_WEEK_DAYS) == 0) && (iter != 0);
     }
 
-    private void ifPrevMonth(int checkIfThisMonth, int prevMonthLength) {
-        if (isItPrevMonth(checkIfThisMonth)) {
-            printPrevOrNextMonthDayNum(prevMonthLength + checkIfThisMonth);
-        }
-    }
-
-    private void ifThisMonth(int checkIfThisMonth, int thisMonthLength) {
-        if (!(isItPrevMonth(checkIfThisMonth)) && !(isItNextMonth(checkIfThisMonth, thisMonthLength))) {
-            ifToday(checkIfThisMonth);
-            if (isItHolydayDayNumber(checkIfThisMonth)) {
-                printWeekEnds(checkIfThisMonth);
-            } else {
-                printWeekDays(checkIfThisMonth);
-            }
+    private void printCurrentMonthDayNumbers(int dayNumberRelativeToThisMonth) {
+        ifToday(dayNumberRelativeToThisMonth);
+        if (isHolidayNumber(dayNumberRelativeToThisMonth)) {
+            printDayNumber(dayNumberRelativeToThisMonth, SET_HOLIDAY_COLOR);
+        } else {
+            printDayNumber(dayNumberRelativeToThisMonth, SET_DEFAULT_COLOR);
         }
     }
 
@@ -123,18 +119,16 @@ public class MonthCalendar {
         }
     }
 
-    private void ifNextMonth(int checkIfThisMonth, int thisMonthLength) {
-        if (isItNextMonth(checkIfThisMonth, thisMonthLength)) {
-            printPrevOrNextMonthDayNum(checkIfThisMonth - thisMonthLength);
-        }
-    }
-
     private DayOfWeek getDayOfWeekName(int iter) {
         return date.minusDays((date.getDayOfWeek().getValue()) - 1 - iter + WEEK_DAYS_SHIFT).getDayOfWeek();
     }
 
+    private DayOfWeek getCurrentDayOfWeek(int monthDay) {
+        return date.minusDays(date.getDayOfMonth() - monthDay).getDayOfWeek();
+    }
+
     private int initFirstDayOfMonthWeekDayId() {
-        int firstDayOfMonthWeekDayId = date.minusDays(date.getDayOfMonth() - 1).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+        int firstDayOfMonthWeekDayId = getCurrentDayOfWeek(1).getValue() - 1 + WEEK_DAYS_SHIFT;
         return normalizeFirrstMonthDayWeekId(firstDayOfMonthWeekDayId);
     }
 
