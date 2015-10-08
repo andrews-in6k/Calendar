@@ -17,10 +17,11 @@ public class MonthCalendar {
     public static final int MAX_WEEK_DAYS = 7;
     public static final int WEEK_DAYS_SHIFT = 0;
 
-    private LocalDate date = LocalDate.now();
+    private LocalDate sourceDate = LocalDate.now();
+    private LocalDate dateForOutput;
 
     MonthCalendar(LocalDate date){
-        this.date = date;
+        this.sourceDate = date;
     }
 
     public void printCalendar(){
@@ -30,7 +31,7 @@ public class MonthCalendar {
     }
 
     private void printMonthAndYear() {
-        System.out.println(date.getMonth() + " " + date.getYear());
+        System.out.println(sourceDate.getMonth() + " " + sourceDate.getYear());
     }
 
     private void printWeekDaysNames() {
@@ -47,8 +48,8 @@ public class MonthCalendar {
     private void printDayNumbers() {
         int firstDayOfMonthWeekDayId = initFirstDayOfMonthWeekDayId();
         int lastDayOfMonthWeekDayId = initLastDayOfMonthWeekDayId();
-        int thisMonthLength = date.lengthOfMonth();
-        int prevMonthLength = date.minusMonths(1).lengthOfMonth();
+        int thisMonthLength = sourceDate.lengthOfMonth();
+        int prevMonthLength = sourceDate.minusMonths(1).lengthOfMonth();
         int calendarSize = thisMonthLength + firstDayOfMonthWeekDayId + (MAX_WEEK_DAYS - lastDayOfMonthWeekDayId - 1);
 
         for (int i = 0; i < calendarSize; i++) {
@@ -67,8 +68,32 @@ public class MonthCalendar {
                 printDayNumber(dayNumberRelativeToThisMonth - thisMonthLength, SET_DAY_FROM_OTHER_MONTH_COLOR);
             }
         }
+//
+//
+//        Light version
+//        System.out.println();
+//        initDateForOutput();
+//        int ii = 0;
+//        while(ii < 35){
+//            if(isEndOfWeek(ii)){
+//                System.out.println();
+//            }
+//            System.out.format("%3d ",dateForOutput.plusDays(ii).getDayOfMonth());
+//            ii++;
+//        }
+//
+//
+//
     }
 
+    private void initDateForOutput(){
+        int dateChange = sourceDate.getDayOfMonth() + sourceDate.minusDays(sourceDate.getDayOfMonth()-1).getDayOfWeek().getValue()-2;
+        dateForOutput = sourceDate.minusDays(dateChange);
+    }
+
+//**********************************************************************************************
+//**********************************************************************************************
+//**********************************************************************************************
     private void printDayNumber(int dayNumber, String setFormat) {
         System.out.print(setFormat);
         System.out.format("%3d ", dayNumber);
@@ -115,7 +140,7 @@ public class MonthCalendar {
     }
 
     private boolean ifToday(int monthDay) {
-        return monthDay == date.getDayOfMonth();
+        return monthDay == sourceDate.getDayOfMonth();
     }
 
     private void printShortWeekDaysName(int indexNumber, String format) {
@@ -124,11 +149,11 @@ public class MonthCalendar {
     }
 
     private DayOfWeek getDayOfWeekName(int indexNumber) {
-        return date.minusDays((date.getDayOfWeek().getValue()) - 1 - indexNumber + WEEK_DAYS_SHIFT).getDayOfWeek();
+        return sourceDate.minusDays((sourceDate.getDayOfWeek().getValue()) - 1 - indexNumber + WEEK_DAYS_SHIFT).getDayOfWeek();
     }
 
     private DayOfWeek getCurrentDayOfWeek(int monthDay) {
-        return date.minusDays(date.getDayOfMonth() - monthDay).getDayOfWeek();
+        return sourceDate.minusDays(sourceDate.getDayOfMonth() - monthDay).getDayOfWeek();
     }
 
     private int initFirstDayOfMonthWeekDayId() {
@@ -137,7 +162,7 @@ public class MonthCalendar {
     }
 
     private int initLastDayOfMonthWeekDayId() {
-        int lastDayOfMonthWeekDayId = date.plusDays(date.lengthOfMonth() - date.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
+        int lastDayOfMonthWeekDayId = sourceDate.plusDays(sourceDate.lengthOfMonth() - sourceDate.getDayOfMonth()).getDayOfWeek().getValue() - 1 + WEEK_DAYS_SHIFT;
         return normalizeLastMonthDayWeekId(lastDayOfMonthWeekDayId);
     }
 
