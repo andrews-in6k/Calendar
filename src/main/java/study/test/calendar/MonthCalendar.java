@@ -13,7 +13,7 @@ public class MonthCalendar {
     public static final String[] SET_HOLIDAY_COLOR = {"\u001b[31m", "red"};
     public static final String[] SET_DAY_FROM_OTHER_MONTH_COLOR = {"\u001b[34m", "blue"};
     public static final String[] SET_DEFAULT_COLOR = {"\u001b[0m", "black"};
-    public static final String[] SET_CURRENT_DAY_ACCENTUATION_COLOR = {"\u001b[42;30m","green"};
+    public static final String[] SET_CURRENT_DAY_ACCENTUATION_COLOR = {"\u001b[42;30m","LawnGreen"};
 
     public static final int MAX_WEEK_DAYS = 7;
     public static final int WEEK_DAYS_SHIFT = 0;
@@ -111,7 +111,7 @@ public class MonthCalendar {
 
     private void printCurrentMonthDayNumbers(int dayIndex, CalendarPrinter calendarPrinter) {
         if (isToday(getCurrentDayNumber(dayIndex).getDayOfMonth())) {
-            consoleCalendarPrinter.setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
+            calendarPrinter.setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
         }
         if (isHolidayNumber(dayIndex)) {
             calendarPrinter.printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_HOLIDAY_COLOR);

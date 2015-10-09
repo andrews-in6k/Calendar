@@ -8,6 +8,7 @@ import java.time.LocalDate;
  */
 public class HTMLCalendarPrinter implements CalendarPrinter{
     public static final int MAX_WEEK_DAYS = MonthCalendar.MAX_WEEK_DAYS;
+    public static final String SET_DEFAULT_BG_COLOR = "white";
 
     private File htmlFile = new File("calendar.html");
 
@@ -15,6 +16,8 @@ public class HTMLCalendarPrinter implements CalendarPrinter{
     private String functionalResultText = new String();
 
     private boolean isFirstCallPrintMonthAndYear = false;
+
+    private String printFormat = SET_DEFAULT_BG_COLOR;
 
     public void printToHTML(){
         try {
@@ -38,15 +41,20 @@ public class HTMLCalendarPrinter implements CalendarPrinter{
     }
 
     public void printShortWeekDaysName(String weekdayName, String[] format){
-        functionalResultText += "<td><font color=\"" + format[1] + "\">" + weekdayName + " </font></td>\n";
+        functionalResultText += "<td align=\"right\"><font color=\"" + format[1] + "\">" + weekdayName + " </font></td>\n";
     }
 
     public void printDayNumber(int dayNumber, String[] format) {
-        functionalResultText += "<td><font color=\"" + format[1] + "\">" + dayNumber + " </font></td>\n";
+        functionalResultText += "<td align=\"right\" bgcolor=\"" + printFormat + "\"><font color=\"" + format[1] + "\">" + dayNumber + " </font></td>\n";
+        resetPrintFormat();
     }
 
     public void setPrintFormat(String[] format){
+        printFormat = format[1];
+    }
 
+    private void resetPrintFormat(){
+        printFormat = SET_DEFAULT_BG_COLOR;
     }
 
     public void printNewLine(){
@@ -55,7 +63,7 @@ public class HTMLCalendarPrinter implements CalendarPrinter{
 
     private void initResultText(){
         functionalResultText = functionalResultText.replace("$newLine","</tr>\n<tr>");
-        resultText = "<table align=\"center\">\n" +
+        resultText = "<table align=\"center\" border=\"0\">\n" +
                 "<tr>\n" +
                 functionalResultText +
                 "\n</tr>" +
