@@ -13,4 +13,6 @@ public interface CalendarPrinter {
     public void printDayNumber(int dayNumber, String[] format) ;
 
     public void setPrintFormat(String[] format);
+
+    public void printNewLine();
 }

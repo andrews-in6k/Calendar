@@ -31,6 +31,10 @@ public class ConsoleCalendarPrinter implements CalendarPrinter{
         System.out.print(format[0]);
     }
 
+    public void printNewLine(){
+        System.out.println();
+    }
+
     private void resetPrintFormat() {
         System.out.print(defaultFormat);
     }

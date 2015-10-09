@@ -33,6 +33,9 @@ public class MonthCalendar {
         printWeekDaysNames(consoleCalendarPrinter);
         printDayNumbers(consoleCalendarPrinter);
         htmlCalendarPrinter.printMonthAndYear(sourceDate);
+        printWeekDaysNames(htmlCalendarPrinter);
+        printDayNumbers(htmlCalendarPrinter);
+        htmlCalendarPrinter.printToHTML();
     }
 
     private void printWeekDaysNames(CalendarPrinter calendarPrinter) {
@@ -43,14 +46,14 @@ public class MonthCalendar {
                 calendarPrinter.printShortWeekDaysName(getShortWeekdayName(weekDayIndex), SET_DEFAULT_COLOR);
             }
         }
-        System.out.println();
+        calendarPrinter.printNewLine();
     }
 
     private void printDayNumbers(CalendarPrinter calendarPrinter) {
         initDateForOutput();
         for (int dayIndex = 0; isNotNextMonthFirstWeekEnd(dayIndex); dayIndex++) {
             if (isEndOfWeek(dayIndex)) {
-                System.out.println();
+                calendarPrinter.printNewLine();
             }
             if (isPrevMonth(dayIndex)) {
                 calendarPrinter.printDayNumber(getCurrentDayNumber(dayIndex).getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
