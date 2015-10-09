@@ -34,100 +34,87 @@ public class MonthCalendar {
 
     private void printWeekDaysNames() {
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            String displayName = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.CANADA);
+            String displayWeekdayName = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.CANADA);
             if (isWeekend(dayOfWeek)) {
-                calendarPrinter.printShortWeekDayName(displayName, SET_HOLIDAY_COLOR);
+                calendarPrinter.printShortWeekDayName(displayWeekdayName, SET_HOLIDAY_COLOR);
             } else {
-                calendarPrinter.printShortWeekDayName(displayName, SET_DEFAULT_COLOR);
+                calendarPrinter.printShortWeekDayName(displayWeekdayName, SET_DEFAULT_COLOR);
             }
         }
         calendarPrinter.printNewLine();
     }
 
     private void printDayNumbers() {
-        LocalDate date = initDateForOutput();
-        for (int dayIndex = 0; isNotNextMonthFirstWeekEnd(date); dayIndex++, date = date.plusDays(1)) {
-            if (isPrevMonth(date)) {
-                calendarPrinter.printDayNumber(date.getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
+        for (initDateForOutput(); isNotNextMonthFirstWeekEnd(); dateForOutput = dateForOutput.plusDays(1)) {
+            if (isPrevMonth()) {
+                calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
             }
-            if (isCurrentMonth(date)) {
-                printCurrentMonthDayNumbers(date, calendarPrinter);
+            if (isCurrentMonth()) {
+                printCurrentMonthDayNumbers();
             }
-            if (isNextMonth(date)) {
-                calendarPrinter.printDayNumber(date.getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
+            if (isNextMonth()) {
+                calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), SET_DAY_FROM_OTHER_MONTH_COLOR);
             }
-            if (isEndOfWeek(date)) {
+            if (isEndOfWeek()) {
                 calendarPrinter.printNewLine();
             }
         }
     }
 
-    private LocalDate initDateForOutput() {
-        int sourceDateShiftRelativeToDayOfMonth = sourceDate.getDayOfMonth() - 1 + calculateSourceDateShift();
+    private void initDateForOutput() {
+        int sourceDateShiftRelativeToDayOfMonth = sourceDate.getDayOfMonth() - 1 + getFirstMonthWeekdayId();
         dateForOutput = sourceDate.minusDays(sourceDateShiftRelativeToDayOfMonth);
-        return LocalDate.from(dateForOutput);
     }
 
     private boolean isWeekend(DayOfWeek dayOfWeekName) {
         return dayOfWeekName.equals(DayOfWeek.SUNDAY) || dayOfWeekName.equals(DayOfWeek.SATURDAY);
     }
 
-    private boolean isHolidayNumber(LocalDate date) {
-        return isWeekend(date.getDayOfWeek());
+    private boolean isHolidayNumber() {
+        return isWeekend(dateForOutput.getDayOfWeek());
     }
 
-    private boolean isPrevMonth(LocalDate date) {
-        return date.getMonthValue() == sourceDate.minusMonths(1).getMonthValue();
+    private boolean isPrevMonth() {
+        return dateForOutput.getMonthValue() == getChangedMonthValue(-1);
     }
 
-    private boolean isNextMonth(LocalDate date) {
-        return date.getMonthValue() == sourceDate.plusMonths(1).getMonthValue();
+    private boolean isNextMonth() {
+        return dateForOutput.getMonthValue() == getChangedMonthValue(1);
     }
 
-    private boolean isCurrentMonth(LocalDate date) {
-        return !(isPrevMonth(date)) && !(isNextMonth(date));
+    private boolean isCurrentMonth() {
+        return !(isPrevMonth()) && !(isNextMonth());
     }
 
-    private boolean isNotNextMonthFirstWeekEnd(LocalDate date) {
-        return !((date.getMonthValue() == sourceDate.plusMonths(1).getMonthValue()) &&
-                date.getDayOfWeek().equals(DayOfWeek.MONDAY));
+    private boolean isNotNextMonthFirstWeekEnd() {
+        return !((dateForOutput.getMonthValue() == getChangedMonthValue(1)) &&
+                dateForOutput.getDayOfWeek().equals(DayOfWeek.MONDAY));
     }
 
-    private boolean isEndOfWeek(LocalDate date) {
-        return date.getDayOfWeek().equals(DayOfWeek.SUNDAY);
+    private boolean isEndOfWeek() {
+        return dateForOutput.getDayOfWeek().equals(DayOfWeek.SUNDAY);
     }
 
     private boolean isToday(int monthDay) {
         return monthDay == sourceDate.getDayOfMonth();
     }
 
-    private void printCurrentMonthDayNumbers(LocalDate date,CalendarPrinter calendarPrinter) {
-        if (isToday(date.getDayOfMonth())) {
+    private void printCurrentMonthDayNumbers() {
+        if (isToday(dateForOutput.getDayOfMonth())) {
             calendarPrinter.setPrintFormat(SET_CURRENT_DAY_ACCENTUATION_COLOR);
         }
-        if (isHolidayNumber(date)) {
-            calendarPrinter.printDayNumber(date.getDayOfMonth(), SET_HOLIDAY_COLOR);
+        if (isHolidayNumber()) {
+            calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), SET_HOLIDAY_COLOR);
         } else {
-            calendarPrinter.printDayNumber(date.getDayOfMonth(), SET_DEFAULT_COLOR);
+            calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), SET_DEFAULT_COLOR);
         }
-    }
-
-    private int calculateSourceDateShift() {
-        int sourceDateShift = getFirstMonthWeekdayId();
-        if ((sourceDateShift >= 0) || (causeToWeekdayId(sourceDateShift) == 0)) {
-            sourceDateShift = causeToWeekdayId(sourceDateShift);
-        } else {
-            sourceDateShift = MAX_WEEK_DAYS - Math.abs(causeToWeekdayId(sourceDateShift));
-        }
-        return sourceDateShift;
-    }
-
-    private int causeToWeekdayId(int increasedWeekdayIndex) {
-        return increasedWeekdayIndex % MAX_WEEK_DAYS;
     }
 
     private int getFirstMonthWeekdayId() {
         return sourceDate.minusDays(sourceDate.getDayOfMonth() - 1).getDayOfWeek().getValue() - 1;
     }
 
+    private int getChangedMonthValue(int change) {
+        return sourceDate.plusMonths(change).getMonthValue();
+    }
 }
