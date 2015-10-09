@@ -16,7 +16,7 @@ public class ConsoleCalendarPrinter implements CalendarPrinter{
         System.out.println(date.getMonth() + " " + date.getYear());
     }
 
-    public void printShortWeekDaysName(String weekdayName, String[] format) {
+    public void printShortWeekDayName(String weekdayName, String[] format) {
         System.out.print(format[0] +weekdayName + " ");
         resetPrintFormat();
     }

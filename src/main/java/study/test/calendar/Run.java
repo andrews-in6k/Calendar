@@ -7,7 +7,8 @@ public class Run {
     private static LocalDate date = LocalDate.now();
 
     public static void main(String[] args) {
-        MonthCalendar calendar = new MonthCalendar(date);
+        ConsoleCalendarPrinter consoleCalendarPrinter = new ConsoleCalendarPrinter(MonthCalendar.SET_DEFAULT_COLOR);
+        MonthCalendar calendar = new MonthCalendar(consoleCalendarPrinter, date);
         calendar.printCalendar();
     }
 

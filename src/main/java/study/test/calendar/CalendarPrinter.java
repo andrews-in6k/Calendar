@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public interface CalendarPrinter {
     public void printMonthAndYear(LocalDate date);
 
-    public void printShortWeekDaysName(String weekdayName, String[] format);
+    public void printShortWeekDayName(String weekdayName, String[] format);
 
     public void printDayNumber(int dayNumber, String[] format) ;
 
