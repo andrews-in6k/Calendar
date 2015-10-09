@@ -19,18 +19,6 @@ public class HTMLCalendarPrinter implements CalendarPrinter {
 
     private String printFormat = SET_DEFAULT_BG_COLOR;
 
-    public void printToHTML() {
-        try {
-            initResultText();
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(htmlFile));
-            bufferedWriter.write(resultText);
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void printMonthAndYear(LocalDate date) {
         if (isFirstCallPrintMonthAndYear) {
             functionalResultText += "<tr>\n";
@@ -73,6 +61,19 @@ public class HTMLCalendarPrinter implements CalendarPrinter {
 
     public void printNewLine() {
         functionalResultText += "$newLine";
+    }
+
+    public void endPrint() {
+        try {
+            initResultText();
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(htmlFile));
+            bufferedWriter.write(resultText);
+            bufferedWriter.close();
+            System.out.println("HTML created");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initResultText() {

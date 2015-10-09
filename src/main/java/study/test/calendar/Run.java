@@ -8,7 +8,8 @@ public class Run {
 
     public static void main(String[] args) {
         ConsoleCalendarPrinter consoleCalendarPrinter = new ConsoleCalendarPrinter(MonthCalendar.SET_DEFAULT_COLOR);
-        MonthCalendar calendar = new MonthCalendar(consoleCalendarPrinter, date);
+        HTMLCalendarPrinter htmlCalendarPrinter = new HTMLCalendarPrinter();
+        MonthCalendar calendar = new MonthCalendar(htmlCalendarPrinter, date);
         calendar.printCalendar();
     }
 

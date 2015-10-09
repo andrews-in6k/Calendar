@@ -38,4 +38,8 @@ public class ConsoleCalendarPrinter implements CalendarPrinter{
     private void resetPrintFormat() {
         System.out.print(defaultFormat);
     }
+
+    public void endPrint(){
+        System.out.println("___________________________");
+    }
 }

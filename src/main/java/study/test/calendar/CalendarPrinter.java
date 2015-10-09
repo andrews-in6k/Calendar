@@ -15,4 +15,6 @@ public interface CalendarPrinter {
     public void setPrintFormat(String[] format);
 
     public void printNewLine();
+
+    public void endPrint();
 }
