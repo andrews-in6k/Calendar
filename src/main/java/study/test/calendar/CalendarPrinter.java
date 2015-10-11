@@ -8,11 +8,11 @@ import java.time.LocalDate;
 public interface CalendarPrinter {
     public void printMonthAndYear(LocalDate date);
 
-    public void printShortWeekDayName(String weekdayName, String[] format);
+    public void printShortWeekDayName(String weekdayName, PrintFormat format);
 
-    public void printDayNumber(int dayNumber, String[] format) ;
+    public void printDayNumber(int dayNumber, PrintFormat format) ;
 
-    public void setPrintFormat(String[] format);
+    public void setPrintFormat(PrintFormat format);
 
     public void printNewLine();
 

@@ -8,27 +8,27 @@ import java.time.LocalDate;
 public class ConsoleCalendarPrinter implements CalendarPrinter{
     private String defaultFormat = "\u001b[0m";
 
-    ConsoleCalendarPrinter(String[] defaultFormat){
-        this.defaultFormat = defaultFormat[0];
+    ConsoleCalendarPrinter(String defaultFormat){
+        this.defaultFormat = defaultFormat;
     }
 
     public void printMonthAndYear(LocalDate date) {
         System.out.println(date.getMonth() + " " + date.getYear());
     }
 
-    public void printShortWeekDayName(String weekdayName, String[] format) {
-        System.out.print(format[0] +weekdayName + " ");
+    public void printShortWeekDayName(String weekdayName, PrintFormat format) {
+        System.out.print(format.getCurrentANCIFormat() +weekdayName + " ");
         resetPrintFormat();
     }
 
-    public void printDayNumber(int dayNumber, String[] format) {
-        System.out.print(format[0]);
+    public void printDayNumber(int dayNumber, PrintFormat format) {
+        System.out.print(format.getCurrentANCIFormat());
         System.out.format("%3d ", dayNumber);
         resetPrintFormat();
     }
 
-    public void setPrintFormat(String[] format) {
-        System.out.print(format[0]);
+    public void setPrintFormat(PrintFormat format) {
+        System.out.print(format.getCurrentANCIFormat());
     }
 
     public void printNewLine(){

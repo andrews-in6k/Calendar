@@ -34,25 +34,25 @@ public class HTMLCalendarPrinter implements CalendarPrinter {
         printNewLine();
     }
 
-    public void printShortWeekDayName(String weekdayName, String[] format) {
+    public void printShortWeekDayName(String weekdayName, PrintFormat format) {
         functionalResultText += "<td align=\"right\"><font color=\"" +
-                format[1] + "\">" +
+                format.getCurrentTEXTFormat() + "\">" +
                 weekdayName +
                 " </font></td>\n";
     }
 
-    public void printDayNumber(int dayNumber, String[] format) {
+    public void printDayNumber(int dayNumber, PrintFormat format) {
         functionalResultText += "<td align=\"right\" bgcolor=\"" +
                 printFormat +
                 "\"  style=\"border-radius:5px\"><font color=\"" +
-                format[1] + "\">" +
+                format.getCurrentTEXTFormat() + "\">" +
                 dayNumber +
                 " </font></td>\n";
         resetPrintFormat();
     }
 
-    public void setPrintFormat(String[] format) {
-        printFormat = format[1];
+    public void setPrintFormat(PrintFormat format) {
+        printFormat = format.getCurrentTEXTFormat();
     }
 
     private void resetPrintFormat() {
