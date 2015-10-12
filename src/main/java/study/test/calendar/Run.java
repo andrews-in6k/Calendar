@@ -5,12 +5,12 @@ import java.time.LocalDate;
 public class Run {
 
     private static LocalDate date = LocalDate.now();
-    private static PrintFormat printFormat= new PrintFormat();
+    private static PrintFormat printFormat = new PrintFormat();
 
     public static void main(String[] args) {
-        ConsoleCalendarPrinter consoleCalendarPrinter = new ConsoleCalendarPrinter(printFormat.getAnsiDefaultColor());
+//        ConsoleCalendarPrinter consoleCalendarPrinter = new ConsoleCalendarPrinter(printFormat.getAnsiDefaultColor());
         HTMLCalendarPrinter htmlCalendarPrinter = new HTMLCalendarPrinter();
-        MonthCalendar calendar = new MonthCalendar(consoleCalendarPrinter, date);
+        MonthCalendar calendar = new MonthCalendar(htmlCalendarPrinter, date);
         calendar.printCalendar();
     }
 

@@ -11,7 +11,7 @@ import java.util.Locale;
 public class MonthCalendar {
 
     public static final int MAX_WEEK_DAYS = 7;
-    public static final DayOfWeek FIRST_WEEK_DAY_NAME = DayOfWeek.MONDAY;
+    public static final DayOfWeek FIRST_DAY_OF_WEEK = DayOfWeek.MONDAY;
 
     private LocalDate sourceDate = LocalDate.now();
     private LocalDate dateForOutput;
@@ -27,55 +27,67 @@ public class MonthCalendar {
 
     public void printCalendar() {
         initDateForOutput();
+        calendarPrinter.startPrint();
         calendarPrinter.printMonthAndYear(sourceDate);
         printWeekDaysNames();
         printDayNumbers();
         calendarPrinter.endPrint();
     }
 
+    private void initDateForOutput() {
+        int sourceDateShiftRelativeToDayOfMonth = sourceDate.getDayOfMonth() - 1 + calculateWeekdayShift();
+        dateForOutput = sourceDate.minusDays(sourceDateShiftRelativeToDayOfMonth);
+    }
+
+    private int calculateWeekdayShift() {
+        int weekdayShift = FIRST_DAY_OF_WEEK.getValue() - getFirstMonthWeekdayId() - 1;
+        if (weekdayShift <= 0) {
+            weekdayShift = Math.abs(weekdayShift);
+        } else {
+            weekdayShift = MAX_WEEK_DAYS - weekdayShift;
+        }
+        return weekdayShift;
+    }
+
     private void printWeekDaysNames() {
         LocalDate date = dateForOutput;
         do {
             String displayWeekdayName = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA);
-            if (isWeekend(date.getDayOfWeek())) {
+
+            if (isWeekend(date.getDayOfWeek()))
                 printFormat.setFormatAsHoliday();
-                calendarPrinter.printShortWeekDayName(displayWeekdayName, printFormat);
-            } else {
+            else
                 printFormat.setFormatAsDefault();
-                calendarPrinter.printShortWeekDayName(displayWeekdayName, printFormat);
-            }
+
+            calendarPrinter.printShortWeekDayName(displayWeekdayName, printFormat);
+
             date = date.plusDays(1);
-        } while (!date.getDayOfWeek().equals(FIRST_WEEK_DAY_NAME));
+        } while (!date.getDayOfWeek().equals(FIRST_DAY_OF_WEEK));
         calendarPrinter.printNewLine();
     }
 
     private void printDayNumbers() {
-        for (; isNotNextMonthFirstWeekEnd(); dateForOutput = dateForOutput.plusDays(1)) {
-            if (isPrevMonth()) {
+        for (; !isFirstWeekendOfNextMonth(); dateForOutput = dateForOutput.plusDays(1)) {
+
+            if (isPrevMonth())
                 printFormat.setFormatAsDayFromOtherMonth();
-                calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), printFormat);
-            }
-            if (isCurrentMonth()) {
-                printCurrentMonthDayNumbers();
-            }
-            if (isNextMonth()) {
+
+            if (isCurrentMonth())
+                setCurrentDayFormat();
+
+            if (isNextMonth())
                 printFormat.setFormatAsDayFromOtherMonth();
-                calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), printFormat);
-            }
-            if (isEndOfWeek()) {
+
+            calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), printFormat);
+
+            if (isEndOfWeek())
                 calendarPrinter.printNewLine();
-            }
         }
     }
 
-    private void initDateForOutput() {
-        int sourceDateShiftRelativeToDayOfMonth = sourceDate.getDayOfMonth() - 1 + generateWeekdayShift();
-        dateForOutput = sourceDate.minusDays(sourceDateShiftRelativeToDayOfMonth);
-    }
-
-    private boolean isNotNextMonthFirstWeekEnd() {
-        return !((dateForOutput.getMonthValue() == getChangedMonthValue(1)) &&
-                dateForOutput.getDayOfWeek().equals(FIRST_WEEK_DAY_NAME));
+    private boolean isFirstWeekendOfNextMonth() {
+        return (dateForOutput.getMonthValue() == getChangedMonthValue(1)) &&
+                dateForOutput.getDayOfWeek().equals(FIRST_DAY_OF_WEEK);
     }
 
     private boolean isWeekend(DayOfWeek dayOfWeekName) {
@@ -95,25 +107,21 @@ public class MonthCalendar {
     }
 
     private boolean isEndOfWeek() {
-        return dateForOutput.minusDays(FIRST_WEEK_DAY_NAME.getValue() - 1).getDayOfWeek().equals(DayOfWeek.SUNDAY);
+        return dateForOutput.minusDays(FIRST_DAY_OF_WEEK.getValue() - 1).getDayOfWeek().equals(DayOfWeek.SUNDAY);
     }
 
     private boolean isToday(int monthDay) {
         return monthDay == sourceDate.getDayOfMonth();
     }
 
-    private void printCurrentMonthDayNumbers() {
-        if (isToday(dateForOutput.getDayOfMonth())) {
-            printFormat.setFormatAsCurrentDay();
-            calendarPrinter.setPrintFormat(printFormat);
-        }
-        if (isWeekend(dateForOutput.getDayOfWeek())) {
+    private void setCurrentDayFormat() {
+        printFormat.setFormatAsDefault();
+
+        if (isWeekend(dateForOutput.getDayOfWeek()))
             printFormat.setFormatAsHoliday();
-            calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), printFormat);
-        } else {
-            printFormat.setFormatAsDefault();
-            calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), printFormat);
-        }
+
+        if (isToday(dateForOutput.getDayOfMonth()))
+            printFormat.setFormatAsCurrentDay();
     }
 
     private int getFirstMonthWeekdayId() {
@@ -122,15 +130,5 @@ public class MonthCalendar {
 
     private int getChangedMonthValue(int change) {
         return sourceDate.plusMonths(change).getMonthValue();
-    }
-
-    private int generateWeekdayShift() {
-        int weekdayShift = FIRST_WEEK_DAY_NAME.getValue() - getFirstMonthWeekdayId() - 1;
-        if (weekdayShift <= 0) {
-            weekdayShift = Math.abs(weekdayShift);
-        } else {
-            weekdayShift = MAX_WEEK_DAYS - weekdayShift;
-        }
-        return weekdayShift;
     }
 }

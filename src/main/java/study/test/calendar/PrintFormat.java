@@ -14,33 +14,50 @@ public class PrintFormat {
     private static final String TEXT_DEFAULT_COLOR = "black";
     private static final String TEXT_CURRENT_DAY_ACCENTUATION_COLOR = "LawnGreen";
 
-    private String currentANCIFormat;
-    private String currentTEXTFormat;
+    private static final String TEXT_DEFAULT_DAY_ACCENTUATION_COLOR = "white";
 
-    public void setFormatAsHoliday(){
-        currentANCIFormat = ANSI_HOLIDAY_COLOR;
+    private String currentANSIFormat;
+    private String currentTEXTFormat;
+    private String currentAccentuationANSIFormat = ANSI_DEFAULT_COLOR;
+    private String currentAccentuationTEXTFormat = TEXT_DEFAULT_DAY_ACCENTUATION_COLOR;
+
+    public void setFormatAsHoliday() {
+        currentANSIFormat = ANSI_HOLIDAY_COLOR;
         currentTEXTFormat = TEXT_HOLIDAY_COLOR;
     }
-    public void setFormatAsDayFromOtherMonth(){
-        currentANCIFormat = ANSI_DAY_FROM_OTHER_MONTH_COLOR;
+
+    public void setFormatAsDayFromOtherMonth() {
+        currentANSIFormat = ANSI_DAY_FROM_OTHER_MONTH_COLOR;
         currentTEXTFormat = TEXT_DAY_FROM_OTHER_MONTH_COLOR;
     }
-    public void setFormatAsDefault(){
-        currentANCIFormat = ANSI_DEFAULT_COLOR;
+
+    public void setFormatAsDefault() {
+        currentANSIFormat = ANSI_DEFAULT_COLOR;
         currentTEXTFormat = TEXT_DEFAULT_COLOR;
+        currentAccentuationANSIFormat = ANSI_DEFAULT_COLOR;
+        currentAccentuationTEXTFormat = TEXT_DEFAULT_DAY_ACCENTUATION_COLOR;
     }
 
-    public void setFormatAsCurrentDay(){
-        currentANCIFormat = ANSI_CURRENT_DAY_ACCENTUATION_COLOR;
-        currentTEXTFormat = TEXT_CURRENT_DAY_ACCENTUATION_COLOR;
+    public void setFormatAsCurrentDay() {
+        currentAccentuationANSIFormat = ANSI_CURRENT_DAY_ACCENTUATION_COLOR;
+        currentAccentuationTEXTFormat = TEXT_CURRENT_DAY_ACCENTUATION_COLOR;
+
     }
 
     public String getCurrentANSIFormat() {
-        return currentANCIFormat;
+        return currentANSIFormat;
     }
 
     public String getCurrentTEXTFormat() {
         return currentTEXTFormat;
+    }
+
+    public String getCurrentAccentuationANSIFormat() {
+        return currentAccentuationANSIFormat;
+    }
+
+    public String getCurrentAccentuationTEXTFormat() {
+        return currentAccentuationTEXTFormat;
     }
 
     public static String getAnsiHolidayColor() {

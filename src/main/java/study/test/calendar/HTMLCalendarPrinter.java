@@ -7,52 +7,43 @@ import java.time.LocalDate;
  * Created by anri on 08.10.15.
  */
 public class HTMLCalendarPrinter implements CalendarPrinter {
-    public static final int MAX_WEEK_DAYS = MonthCalendar.MAX_WEEK_DAYS;
     public static final String SET_DEFAULT_BG_COLOR = "white";
 
     private File htmlFile = new File("calendar.html");
 
-    private String resultText = new String();
-    private String functionalResultText = new String();
+    private String resultText = "";
 
     private boolean isFirstCallPrintMonthAndYear = false;
 
     private String printFormat = SET_DEFAULT_BG_COLOR;
 
+    public void startPrint(){
+        resultText += "<table align=\"center\" border=\"0\">\n<tr>\n";
+    }
+
     public void printMonthAndYear(LocalDate date) {
         if (isFirstCallPrintMonthAndYear) {
-            functionalResultText += "<tr>\n";
+            resultText += "<tr>\n";
             isFirstCallPrintMonthAndYear = true;
         }
-        functionalResultText += "<th colspan=\"" +
-                MAX_WEEK_DAYS +
-                "\"><h1 align = \"center\">"
-                + date.getMonth() +
-                " " +
-                date.getYear() +
-                "</h1></th>\n";
+
+        resultText += String.format(
+                "<th colspan=\"%s\"><h1 align = \"center\">%s %s</h1></th>",
+                MonthCalendar.MAX_WEEK_DAYS, date.getMonth(), date.getYear());
         printNewLine();
     }
 
     public void printShortWeekDayName(String weekdayName, PrintFormat format) {
-        functionalResultText += "<td align=\"right\"><font color=\"" +
-                format.getCurrentTEXTFormat() + "\">" +
-                weekdayName +
-                " </font></td>\n";
+        resultText += String.format(
+                "<td align=\"right\"><font color=\"%s\">%s</font></td>\n",
+                format.getCurrentTEXTFormat(), weekdayName);
     }
 
+    // some problems here
     public void printDayNumber(int dayNumber, PrintFormat format) {
-        functionalResultText += "<td align=\"right\" bgcolor=\"" +
-                printFormat +
-                "\"  style=\"border-radius:5px\"><font color=\"" +
-                format.getCurrentTEXTFormat() + "\">" +
-                dayNumber +
-                " </font></td>\n";
+        resultText += String.format("<td align=\"right\" bgcolor=\"%s\" style=\"border-radius:5px\"><font color=\"%s\">%s </font></td>\n",
+                format.getCurrentAccentuationTEXTFormat(), format.getCurrentTEXTFormat(), dayNumber);
         resetPrintFormat();
-    }
-
-    public void setPrintFormat(PrintFormat format) {
-        printFormat = format.getCurrentTEXTFormat();
     }
 
     private void resetPrintFormat() {
@@ -60,29 +51,22 @@ public class HTMLCalendarPrinter implements CalendarPrinter {
     }
 
     public void printNewLine() {
-        functionalResultText += "$newLine";
+        resultText += "$newLine";
     }
 
     public void endPrint() {
         try {
-            initResultText();
+            resultText +="\n</tr></table>";
+            resultText = resultText.replace("$newLine", "</tr>\n<tr>");
+
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(htmlFile));
             bufferedWriter.write(resultText);
             bufferedWriter.close();
+
             System.out.println("HTML created");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
-    private void initResultText() {
-        functionalResultText = functionalResultText.replace("$newLine", "</tr>\n<tr>");
-        resultText = "<table align=\"center\" border=\"0\">\n" +
-                "<tr>\n" +
-                functionalResultText +
-                "\n</tr>" +
-                "</table>";
-    }
-
 }
