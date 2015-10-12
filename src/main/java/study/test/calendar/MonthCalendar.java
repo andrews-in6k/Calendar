@@ -13,9 +13,10 @@ public class MonthCalendar {
     public static final int MAX_WEEK_DAYS = 7;
     public static final DayOfWeek FIRST_WEEK_DAY_NAME = DayOfWeek.MONDAY;
 
-    private CalendarPrinter calendarPrinter;
     private LocalDate sourceDate = LocalDate.now();
     private LocalDate dateForOutput;
+
+    private CalendarPrinter calendarPrinter;
 
     private PrintFormat printFormat = new PrintFormat();
 

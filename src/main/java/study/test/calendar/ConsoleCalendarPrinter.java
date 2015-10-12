@@ -17,18 +17,18 @@ public class ConsoleCalendarPrinter implements CalendarPrinter{
     }
 
     public void printShortWeekDayName(String weekdayName, PrintFormat format) {
-        System.out.print(format.getCurrentANCIFormat() +weekdayName + " ");
+        System.out.print(format.getCurrentANSIFormat() +weekdayName + " ");
         resetPrintFormat();
     }
 
     public void printDayNumber(int dayNumber, PrintFormat format) {
-        System.out.print(format.getCurrentANCIFormat());
+        System.out.print(format.getCurrentANSIFormat());
         System.out.format("%3d ", dayNumber);
         resetPrintFormat();
     }
 
     public void setPrintFormat(PrintFormat format) {
-        System.out.print(format.getCurrentANCIFormat());
+        System.out.print(format.getCurrentANSIFormat());
     }
 
     public void printNewLine(){
