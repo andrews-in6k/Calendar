@@ -15,11 +15,12 @@ public class Week {
 
     private int weekValue;
 
-    Week(int weekValue, int dayOfMonth, int monthValue){
+    Week(int weekValue, LocalDate date){
         this.weekValue = weekValue;
 
         for(int i = 0; i < MAX_WEEK_DAYS; i++){
-            dayList.add(new Day(dayOfMonth, FIRST_DAY_OF_WEEK.plus(i), monthValue));
+            dayList.add(new Day(date.getDayOfMonth(), FIRST_DAY_OF_WEEK.plus(i), date.getMonthValue()));
+            date = date.plusDays(1);
         }
     }
 
