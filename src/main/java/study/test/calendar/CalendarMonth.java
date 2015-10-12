@@ -1,19 +1,24 @@
 package study.test.calendar;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by employee on 10/12/15.
  */
-public class Month {
+public class CalendarMonth {
     private List<Week> weekList = new ArrayList<Week>();
 
-    private int monthValue;
+    private Month monthName;
 
-    Month(LocalDate date){
-        this.monthValue = date.getMonthValue();
+    private int year;
+
+    CalendarMonth(LocalDate date){
+        this.monthName = date.getMonth();
+        this.year = date.getYear();
 
         date = date.minusDays(date.getDayOfMonth() - 1);
 
@@ -27,7 +32,7 @@ public class Month {
             weekList.add(new Week(weekValue, date));
             weekValue++;
             date = date.plusWeeks(1);
-        }while (date.getMonthValue() == monthValue);
+        }while (date.getMonth() == monthName);
 
     }
 
@@ -35,8 +40,12 @@ public class Month {
         return weekList;
     }
 
-    public int getMonthValue() {
-        return monthValue;
+    public Month getMonthName() {
+        return monthName;
+    }
+
+    public int getYear() {
+        return year;
     }
 
 }

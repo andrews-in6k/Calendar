@@ -7,7 +7,11 @@ public class Run {
     private static LocalDate date = LocalDate.now();
 
     public static void main(String[] args) {
-        Month month = new Month(date);
+        CalendarMonth calendarMonth = new CalendarMonth(date);
+        Printer printer = new ANSIPrinter();
+        printer.beginPrint();
+        printer.printCalendar(calendarMonth);
+        printer.endPrint();
     }
 
 }
