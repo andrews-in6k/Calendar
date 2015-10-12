@@ -17,6 +17,14 @@ public class HTMLPrinter extends Printer {
 
     }
 
+    protected void printDayNumber(Day day){
+
+    }
+
+    protected void printLine(){
+
+    }
+
     public void endPrint(){
 
     }
