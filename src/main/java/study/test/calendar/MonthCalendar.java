@@ -72,12 +72,13 @@ public class MonthCalendar {
         dateForOutput = sourceDate.minusDays(sourceDateShiftRelativeToDayOfMonth);
     }
 
-    private boolean isWeekend(DayOfWeek dayOfWeekName) {
-        return dayOfWeekName.equals(DayOfWeek.SUNDAY) || dayOfWeekName.equals(DayOfWeek.SATURDAY);
+    private boolean isNotNextMonthFirstWeekEnd() {
+        return !((dateForOutput.getMonthValue() == getChangedMonthValue(1)) &&
+                dateForOutput.getDayOfWeek().equals(FIRST_WEEK_DAY_NAME));
     }
 
-    private boolean isHolidayNumber() {
-        return isWeekend(dateForOutput.getDayOfWeek());
+    private boolean isWeekend(DayOfWeek dayOfWeekName) {
+        return dayOfWeekName.equals(DayOfWeek.SUNDAY) || dayOfWeekName.equals(DayOfWeek.SATURDAY);
     }
 
     private boolean isPrevMonth() {
@@ -90,11 +91,6 @@ public class MonthCalendar {
 
     private boolean isCurrentMonth() {
         return !(isPrevMonth()) && !(isNextMonth());
-    }
-
-    private boolean isNotNextMonthFirstWeekEnd() {
-        return !((dateForOutput.getMonthValue() == getChangedMonthValue(1)) &&
-                dateForOutput.getDayOfWeek().equals(FIRST_WEEK_DAY_NAME));
     }
 
     private boolean isEndOfWeek() {
@@ -110,7 +106,7 @@ public class MonthCalendar {
             printFormat.setFormatAsCurrentDay();
             calendarPrinter.setPrintFormat(printFormat);
         }
-        if (isHolidayNumber()) {
+        if (isWeekend(dateForOutput.getDayOfWeek())) {
             printFormat.setFormatAsHoliday();
             calendarPrinter.printDayNumber(dateForOutput.getDayOfMonth(), printFormat);
         } else {

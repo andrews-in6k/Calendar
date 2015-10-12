@@ -6,15 +6,15 @@ import java.time.LocalDate;
  * Created by anri on 09.10.15.
  */
 public interface CalendarPrinter {
-    public void printMonthAndYear(LocalDate date);
+    void printMonthAndYear(LocalDate date);
 
-    public void printShortWeekDayName(String weekdayName, PrintFormat format);
+    void printShortWeekDayName(String weekdayName, PrintFormat format);
 
-    public void printDayNumber(int dayNumber, PrintFormat format) ;
+    void printDayNumber(int dayNumber, PrintFormat format) ;
 
-    public void setPrintFormat(PrintFormat format);
+    void setPrintFormat(PrintFormat format);
 
-    public void printNewLine();
+    void printNewLine();
 
-    public void endPrint();
+    void endPrint();
 }
