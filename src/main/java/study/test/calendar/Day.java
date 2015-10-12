@@ -32,23 +32,11 @@ public class Day {
         return dayOfWeek;
     }
 
-    public void setDayOfWeek(DayOfWeek dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
     public int getDayOfMonth() {
         return dayOfMonth;
     }
 
-    public void setDayOfMonth(int dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
-    }
-
     public int getMonthValue() {
         return monthValue;
-    }
-
-    public void setMonthValue(int monthValue) {
-        this.monthValue = monthValue;
     }
 }

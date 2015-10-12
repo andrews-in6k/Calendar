@@ -22,4 +22,12 @@ public class Week {
             dayList.add(new Day(dayOfMonth, FIRST_DAY_OF_WEEK.plus(i), monthValue));
         }
     }
+
+    public List<Day> getDayList() {
+        return dayList;
+    }
+
+    public int getWeekValue() {
+        return weekValue;
+    }
 }
