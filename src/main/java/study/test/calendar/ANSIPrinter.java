@@ -1,5 +1,6 @@
 package study.test.calendar;
 
+import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
@@ -7,6 +8,13 @@ import java.util.Locale;
  * Created by employee on 10/12/15.
  */
 public class ANSIPrinter extends Printer {
+    public static final String PRINTER_COLOR_FORMAT_CODING = "ANSI";
+
+    ANSIPrinter(LocalDate currentDate){
+        colorFormat = new ColorFormat(PRINTER_COLOR_FORMAT_CODING);
+
+        this.currentDate = currentDate;
+    }
 
     public void beginPrint(){
         resultText += "--------------------------------\n";
@@ -17,14 +25,14 @@ public class ANSIPrinter extends Printer {
                 calendarMonth.getMonthName(), calendarMonth.getYear());
     }
 
-    protected void printWeekdayName(Day day){
-        resultText += String.format("%s ",
-                day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
+    protected void printWeekdayName(Day day, String format){
+        resultText += String.format("%s%s ",
+                format,day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
     }
 
-    protected void printDayNumber(Day day){
-        resultText += String.format("%3d ",
-                day.getDayOfMonth());
+    protected void printDayNumber(Day day, String format, String accentuationFormat){
+        resultText += String.format("%s%s%3d %s",
+                accentuationFormat, format, day.getDayOfMonth(), colorFormat.getDefaultFormat());
     }
 
     protected void printLine(){

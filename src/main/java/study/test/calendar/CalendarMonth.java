@@ -13,11 +13,13 @@ public class CalendarMonth {
     private List<Week> weekList = new ArrayList<Week>();
 
     private Month monthName;
+    private int monthValue;
 
     private int year;
 
     CalendarMonth(LocalDate date){
         this.monthName = date.getMonth();
+        this.monthValue = date.getMonthValue();
         this.year = date.getYear();
 
         date = date.minusDays(date.getDayOfMonth() - 1);
@@ -42,6 +44,10 @@ public class CalendarMonth {
 
     public Month getMonthName() {
         return monthName;
+    }
+
+    public int getMonthValue() {
+        return monthValue;
     }
 
     public int getYear() {
