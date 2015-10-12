@@ -7,7 +7,7 @@ public class Run {
     private static LocalDate date = LocalDate.now();
 
     public static void main(String[] args) {
-
+        Month month = new Month(date);
     }
 
 }
