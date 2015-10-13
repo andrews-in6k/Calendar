@@ -11,17 +11,20 @@ public class Week {
     public static final DayOfWeek FIRST_DAY_OF_WEEK = DayOfWeek.MONDAY;
     public static final int WEEK_LENGTH = 7;
 
+    private LocalDate dateForOutput;
+
     private List<Day> dayList = new ArrayList<>();
 
-    Week(LocalDate date) {
-        fillDayList(date);
+    Week(LocalDate dateForOutput) {
+        this.dateForOutput = dateForOutput;
+        fillDayList();
     }
 
-    private void fillDayList(LocalDate date) {
+    private void fillDayList() {
         do {
-            dayList.add(new Day(date));
-            date = date.plusDays(1);
-        } while (!date.getDayOfWeek().equals(FIRST_DAY_OF_WEEK));
+            dayList.add(new Day(dateForOutput));
+            dateForOutput = dateForOutput.plusDays(1);
+        } while (!dateForOutput.getDayOfWeek().equals(FIRST_DAY_OF_WEEK));
     }
 
     public List<Day> getDayList() {

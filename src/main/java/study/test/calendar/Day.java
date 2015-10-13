@@ -6,10 +6,10 @@ import java.time.*;
  * Created by employee on 10/12/15.
  */
 public class Day {
-    private LocalDate date;
+    private LocalDate dateForOutput;
 
-    public Day(LocalDate date) {
-        this.date = date;
+    public Day(LocalDate dateForOutput) {
+        this.dateForOutput = dateForOutput;
     }
 
     public boolean isWeekend(){
@@ -21,18 +21,18 @@ public class Day {
     }
 
     public boolean isSameDate(LocalDate date) {
-        return this.date.equals(date);
+        return this.dateForOutput.equals(date);
     }
 
     public DayOfWeek getDayOfWeek() {
-        return date.getDayOfWeek();
+        return dateForOutput.getDayOfWeek();
     }
 
     public int getDayOfMonth() {
-        return date.getDayOfMonth();
+        return dateForOutput.getDayOfMonth();
     }
 
     public Month getMonth() {
-        return date.getMonth();
+        return dateForOutput.getMonth();
     }
 }

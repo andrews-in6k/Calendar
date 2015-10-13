@@ -11,35 +11,37 @@ import java.util.List;
 public class CalendarMonth {
     private List<Week> weekList = new ArrayList<Week>();
 
-    private LocalDate date;
+    private LocalDate dateForCurrentMonth;
+    private LocalDate dateForOutput;
 
-    CalendarMonth(LocalDate date) {
-        this.date = date;
+    CalendarMonth(LocalDate dateForOutput) {
+        this.dateForCurrentMonth = dateForOutput;
+        this.dateForOutput = dateForOutput;
 
-        date = leadDateToStartingPosition(date);
+        this.dateForOutput = leadDateToStartingPosition();
 
-        fillWeekList(date);
+        fillWeekList();
     }
 
-    private LocalDate leadDateToStartingPosition(LocalDate date) {
-        date = date.minusDays(date.getDayOfMonth() - 1);
+    private LocalDate leadDateToStartingPosition() {
+        dateForOutput = dateForOutput.minusDays(dateForOutput.getDayOfMonth() - 1);
 
-        while (!isFirstDayOfWeek(date)) {
-            date = date.minusDays(1);
+        while (!isFirstDayOfWeek()) {
+            dateForOutput = dateForOutput.minusDays(1);
         }
 
-        return date;
+        return dateForOutput;
     }
 
-    private boolean isFirstDayOfWeek(LocalDate date) {
-        return date.getDayOfWeek().equals(Week.FIRST_DAY_OF_WEEK);
+    private boolean isFirstDayOfWeek() {
+        return dateForOutput.getDayOfWeek().equals(Week.FIRST_DAY_OF_WEEK);
     }
 
-    private void fillWeekList(LocalDate date) {
+    private void fillWeekList() {
         do {
-            weekList.add(new Week(date));
-            date = date.plusWeeks(1);
-        } while (date.getMonth() == getMonth());
+            weekList.add(new Week(dateForOutput));
+            dateForOutput = dateForOutput.plusWeeks(1);
+        } while (dateForOutput.getMonth() == getMonth());
     }
 
     public List<Week> getWeekList() {
@@ -47,11 +49,11 @@ public class CalendarMonth {
     }
 
     public Month getMonth() {
-        return date.getMonth();
+        return dateForCurrentMonth.getMonth();
     }
 
     public int getYear() {
-        return date.getYear();
+        return dateForCurrentMonth.getYear();
     }
 
 }
