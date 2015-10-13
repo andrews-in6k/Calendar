@@ -8,7 +8,7 @@ public class Run {
 
     public static void main(String[] args) {
         CalendarMonth calendarMonth = new CalendarMonth(date);
-        Printer printer = new HTMLPrinter(date);
+        Printer printer = new ANSIPrinter(date);
         printer.beginPrint();
         printer.printCalendar(calendarMonth);
         printer.endPrint();

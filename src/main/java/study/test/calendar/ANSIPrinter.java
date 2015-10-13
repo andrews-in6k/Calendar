@@ -27,7 +27,7 @@ public class ANSIPrinter extends Printer {
 
     protected void printWeekdayName(Day day){
         resultText += String.format("%s%s ",
-                textFormat,day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
+                textFormat, day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
     }
 
     protected void printDayNumber(Day day){
