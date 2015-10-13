@@ -12,10 +12,10 @@ import java.util.Locale;
  * Created by employee on 10/12/15.
  */
 public class HTMLPrinter extends Printer {
-    public static final String PRINTER_COLOR_FORMAT_CODING = "TEXT";
+    public static final String CODING_IDENTIFICATION = "TEXT";
 
     HTMLPrinter(LocalDate currentDate){
-        colorFormat = new ColorFormat(PRINTER_COLOR_FORMAT_CODING);
+        colorFormat = new ColorFormat(CODING_IDENTIFICATION);
 
         this.currentDate = currentDate;
     }
@@ -24,7 +24,7 @@ public class HTMLPrinter extends Printer {
         resultText += "<table align=\"center\" border=\"0\">\n<tr>\n";
     }
 
-    protected void printMonthAndYear(CalendarMonth calendarMonth){
+    protected void printMonthAndYear(){
         resultText += String.format(
                 "<th colspan=\"%s\"><h1 align = \"center\">%s %s</h1></th>",
                 Week.MAX_WEEK_DAYS, calendarMonth.getMonthName(), calendarMonth.getYear());

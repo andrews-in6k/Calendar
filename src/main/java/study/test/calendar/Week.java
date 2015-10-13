@@ -13,11 +13,7 @@ public class Week {
 
     private List<Day> dayList = new ArrayList<Day>();
 
-    private int weekValue;
-
-    Week(int weekValue, LocalDate date){
-        this.weekValue = weekValue;
-
+    Week(LocalDate date){
         fillDayList(date);
     }
 
@@ -30,9 +26,5 @@ public class Week {
 
     public List<Day> getDayList() {
         return dayList;
-    }
-
-    public int getWeekValue() {
-        return weekValue;
     }
 }

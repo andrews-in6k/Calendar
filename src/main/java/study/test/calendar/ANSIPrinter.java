@@ -8,10 +8,10 @@ import java.util.Locale;
  * Created by employee on 10/12/15.
  */
 public class ANSIPrinter extends Printer {
-    public static final String PRINTER_COLOR_FORMAT_CODING = "ANSI";
+    public static final String CODING_IDENTIFICATION = "ANSI";
 
     ANSIPrinter(LocalDate currentDate){
-        colorFormat = new ColorFormat(PRINTER_COLOR_FORMAT_CODING);
+        colorFormat = new ColorFormat(CODING_IDENTIFICATION);
 
         this.currentDate = currentDate;
     }
@@ -20,7 +20,7 @@ public class ANSIPrinter extends Printer {
         resultText += "--------------------------------\n";
     }
 
-    protected void printMonthAndYear(CalendarMonth calendarMonth){
+    protected void printMonthAndYear(){
         resultText += String.format("%s %d\n",
                 calendarMonth.getMonthName(), calendarMonth.getYear());
     }

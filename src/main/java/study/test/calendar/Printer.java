@@ -12,20 +12,24 @@ public abstract class Printer {
 
     protected ColorFormat colorFormat;
 
+    CalendarMonth calendarMonth;
+
     String textFormat;
     String accentuationFormat;
 
     abstract void beginPrint();
 
     public void printCalendar(CalendarMonth calendarMonth) {
-        printMonthAndYear(calendarMonth);
-        printWeekdayNames(calendarMonth);
-        printDayNumbers(calendarMonth);
+        this.calendarMonth = calendarMonth;
+        
+        printMonthAndYear();
+        printWeekdayNames();
+        printDayNumbers();
     }
 
-    abstract void printMonthAndYear(CalendarMonth calendarMonth);
+    abstract void printMonthAndYear();
 
-    protected void printWeekdayNames(CalendarMonth calendarMonth) {
+    protected void printWeekdayNames() {
         for (Day day : calendarMonth.getWeekList().get(0).getDayList()) {
             if (day.isWeekend()) {
                 textFormat = colorFormat.getHolidayFormat();
@@ -39,7 +43,7 @@ public abstract class Printer {
         printLine();
     }
 
-    protected void printDayNumbers(CalendarMonth calendarMonth) {
+    protected void printDayNumbers() {
         for (Week week : calendarMonth.getWeekList()) {
             for (Day day : week.getDayList()) {
                 setDefaultColorFormat();

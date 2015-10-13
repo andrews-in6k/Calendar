@@ -21,11 +21,11 @@ public class Day {
     }
 
     public boolean isInMonth(int monthValue){
-        return this.monthValue == monthValue;
+        return getMonthValue() == monthValue;
     }
 
     public boolean isDayEqual(int monthValue, int dayOfMonth){
-        return (this.monthValue == monthValue) && (this.dayOfMonth == dayOfMonth);
+        return (getMonthValue() == monthValue) && (getDayOfMonth() == dayOfMonth);
     }
 
     public DayOfWeek getDayOfWeek() {

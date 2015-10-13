@@ -38,7 +38,7 @@ public class CalendarMonth {
 
     private void fillWeekList(LocalDate date){
         do{
-            weekList.add(new Week(date.getDayOfWeek().getValue(), date));
+            weekList.add(new Week(date));
             date = date.plusWeeks(1);
         }while (date.getMonth() == monthName);
     }
