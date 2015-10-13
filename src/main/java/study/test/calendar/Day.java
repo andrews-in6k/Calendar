@@ -6,7 +6,7 @@ import java.time.*;
  * Created by employee on 10/12/15.
  */
 public class Day {
-    private final LocalDate date;
+    private LocalDate date;
 
     public Day(LocalDate date) {
         this.date = date;
