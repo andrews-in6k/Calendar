@@ -14,7 +14,6 @@ public class CalendarMonth {
 
     private Month monthName;
     private int monthValue;
-
     private int year;
 
     CalendarMonth(LocalDate date){
@@ -22,20 +21,26 @@ public class CalendarMonth {
         this.monthValue = date.getMonthValue();
         this.year = date.getYear();
 
-        date = date.minusDays(date.getDayOfMonth() - 1);
+        date = leadDateToStartingPosition(date);
 
+        fillWeekList(date);
+    }
+
+    private LocalDate leadDateToStartingPosition(LocalDate date){
+        date = date.minusDays(date.getDayOfMonth() - 1);
 
         while(date.getDayOfWeek() != Week.FIRST_DAY_OF_WEEK){
             date = date.minusDays(1);
         }
 
-        int weekValue = 1;
+        return date;
+    }
+
+    private void fillWeekList(LocalDate date){
         do{
-            weekList.add(new Week(weekValue, date));
-            weekValue++;
+            weekList.add(new Week(date.getDayOfWeek().getValue(), date));
             date = date.plusWeeks(1);
         }while (date.getMonth() == monthName);
-
     }
 
     public List<Week> getWeekList() {

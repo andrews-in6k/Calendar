@@ -18,6 +18,10 @@ public class Week {
     Week(int weekValue, LocalDate date){
         this.weekValue = weekValue;
 
+        fillDayList(date);
+    }
+
+    private void fillDayList(LocalDate date){
         for(int i = 0; i < MAX_WEEK_DAYS; i++){
             dayList.add(new Day(date.getDayOfMonth(), FIRST_DAY_OF_WEEK.plus(i), date.getMonthValue()));
             date = date.plusDays(1);

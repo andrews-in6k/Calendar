@@ -12,6 +12,9 @@ public abstract class Printer {
 
     protected ColorFormat colorFormat;
 
+    String textFormat;
+    String accentuationFormat;
+
     abstract void beginPrint();
 
     public void printCalendar(CalendarMonth calendarMonth) {
@@ -25,10 +28,12 @@ public abstract class Printer {
     protected void printWeekdayNames(CalendarMonth calendarMonth) {
         for (Day day : calendarMonth.getWeekList().get(0).getDayList()) {
             if (day.isWeekend()) {
-                printWeekdayName(day, colorFormat.getHolidayFormat());
+                textFormat = colorFormat.getHolidayFormat();
             } else {
-                printWeekdayName(day, colorFormat.getDefaultFormat());
+                textFormat = colorFormat.getDefaultFormat();
             }
+
+            printWeekdayName(day);
         }
 
         printLine();
@@ -37,31 +42,35 @@ public abstract class Printer {
     protected void printDayNumbers(CalendarMonth calendarMonth) {
         for (Week week : calendarMonth.getWeekList()) {
             for (Day day : week.getDayList()) {
-                String format = colorFormat.getDefaultFormat();
-                String accentuationFormat = colorFormat.getDefaultAccentuationFormat();
+                setDefaultColorFormat();
 
                 if (day.isDayEqual(currentDate.getMonthValue(), currentDate.getDayOfMonth())) {
                     accentuationFormat = colorFormat.getCurrentDayAccentuationFormat();
                 }
 
                 if (day.isWeekend()) {
-                    format = colorFormat.getHolidayFormat();
+                    textFormat = colorFormat.getHolidayFormat();
                 }
 
                 if (!day.isInMonth(calendarMonth.getMonthValue())) {
-                    format = colorFormat.getFromOtherMonthFormat();
+                    textFormat = colorFormat.getFromOtherMonthFormat();
                 }
 
-                printDayNumber(day, format, accentuationFormat);
+                printDayNumber(day);
             }
 
             printLine();
         }
     }
 
-    abstract void printWeekdayName(Day day, String format);
+    protected void setDefaultColorFormat(){
+        textFormat = colorFormat.getDefaultFormat();
+        accentuationFormat = colorFormat.getDefaultAccentuationFormat();
+    }
 
-    abstract void printDayNumber(Day day, String format, String accentuationFormat);
+    abstract void printWeekdayName(Day day);
+
+    abstract void printDayNumber(Day day);
 
     abstract void printLine();
 

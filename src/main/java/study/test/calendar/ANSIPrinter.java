@@ -25,14 +25,14 @@ public class ANSIPrinter extends Printer {
                 calendarMonth.getMonthName(), calendarMonth.getYear());
     }
 
-    protected void printWeekdayName(Day day, String format){
+    protected void printWeekdayName(Day day){
         resultText += String.format("%s%s ",
-                format,day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
+                textFormat,day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
     }
 
-    protected void printDayNumber(Day day, String format, String accentuationFormat){
+    protected void printDayNumber(Day day){
         resultText += String.format("%s%s%3d %s",
-                accentuationFormat, format, day.getDayOfMonth(), colorFormat.getDefaultFormat());
+                accentuationFormat, textFormat, day.getDayOfMonth(), colorFormat.getDefaultFormat());
     }
 
     protected void printLine(){

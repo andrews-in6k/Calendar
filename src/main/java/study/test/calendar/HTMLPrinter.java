@@ -31,15 +31,15 @@ public class HTMLPrinter extends Printer {
         printLine();
     }
 
-    protected void printWeekdayName(Day day, String format){
+    protected void printWeekdayName(Day day){
         resultText += String.format(
                 "<td align=\"right\"><font color=\"%s\">%s</font></td>\n",
-                format, day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
+                textFormat, day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
     }
 
-    protected void printDayNumber(Day day, String format, String accentuationFormat){
+    protected void printDayNumber(Day day){
         resultText += String.format("<td align=\"right\" bgcolor=\"%s\" style=\"border-radius:5px\"><font color=\"%s\">%s </font></td>\n",
-                accentuationFormat, format, day.getDayOfMonth());
+                accentuationFormat, textFormat, day.getDayOfMonth());
     }
 
     protected void printLine(){
