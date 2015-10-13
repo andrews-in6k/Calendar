@@ -6,37 +6,33 @@ import java.time.*;
  * Created by employee on 10/12/15.
  */
 public class Day {
-    private int dayOfMonth;
-    private DayOfWeek dayOfWeek;
-    private int monthValue;
+    private final LocalDate date;
 
-    Day(int dayOfMonth, DayOfWeek dayOfWeek, int monthValue){
-        this.dayOfMonth = dayOfMonth;
-        this.dayOfWeek = dayOfWeek;
-        this.monthValue = monthValue;
+    public Day(LocalDate date) {
+        this.date = date;
     }
 
     public boolean isWeekend(){
-        return dayOfWeek.equals(DayOfWeek.SUNDAY) || dayOfWeek.equals(DayOfWeek.SATURDAY);
+        return getDayOfWeek().equals(DayOfWeek.SUNDAY) || getDayOfWeek().equals(DayOfWeek.SATURDAY);
     }
 
-    public boolean isInMonth(int monthValue){
-        return getMonthValue() == monthValue;
+    public boolean isInMonth(Month month){
+        return getMonth() == month;
     }
 
-    public boolean isDayEqual(int monthValue, int dayOfMonth){
-        return (getMonthValue() == monthValue) && (getDayOfMonth() == dayOfMonth);
+    public boolean isSameDate(LocalDate date) {
+        return this.date.equals(date);
     }
 
     public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
+        return date.getDayOfWeek();
     }
 
     public int getDayOfMonth() {
-        return dayOfMonth;
+        return date.getDayOfMonth();
     }
 
-    public int getMonthValue() {
-        return monthValue;
+    public Month getMonth() {
+        return date.getMonth();
     }
 }

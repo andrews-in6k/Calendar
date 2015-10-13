@@ -1,5 +1,6 @@
 package study.test.calendar;
 
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -10,37 +11,39 @@ import java.util.Locale;
 public class ANSIPrinter extends Printer {
     public static final String CODING_IDENTIFICATION = "ANSI";
 
-    ANSIPrinter(LocalDate currentDate){
+    ANSIPrinter(LocalDate currentDate, PrintStream output) {
+        super(currentDate, output);
         colorFormat = new ColorFormat(CODING_IDENTIFICATION);
-
-        this.currentDate = currentDate;
     }
 
-    public void beginPrint(){
-        resultText += "--------------------------------\n";
+    public void beginPrint() {
+        output.print("--------------------------------\n");
     }
 
-    protected void printMonthAndYear(){
-        resultText += String.format("%s %d\n",
-                calendarMonth.getMonthName(), calendarMonth.getYear());
+    protected void printMonthAndYear() {
+        output.printf("%s %d\n",
+                calendarMonth.getMonth(), calendarMonth.getYear());
     }
 
-    protected void printWeekdayName(Day day){
-        resultText += String.format("%s%s ",
+    protected void printWeekdayName(Day day) {
+        output.printf("%s%s ",
                 textFormat, day.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CANADA));
     }
 
-    protected void printDayNumber(Day day){
-        resultText += String.format("%s%s%3d %s",
-                accentuationFormat, textFormat, day.getDayOfMonth(), colorFormat.getDefaultFormat());
+    protected void printDayNumber(Day day) {
+        output.printf("%s%s%3d %s",
+                backgroundFormat, textFormat, day.getDayOfMonth(), colorFormat.getDefaultFormat());
     }
 
-    protected void printLine(){
-        resultText += "\n";
+    protected void beginWeek(){
+
     }
 
-    public void endPrint(){
-        resultText += "--------------------------------\n";
-        System.out.print(resultText);
+    protected void endWeek() {
+        output.println();
+    }
+
+    public void endPrint() {
+        output.printf("--------------------------------\n");
     }
 }

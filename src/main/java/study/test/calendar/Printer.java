@@ -1,5 +1,6 @@
 package study.test.calendar;
 
+import java.io.PrintStream;
 import java.time.LocalDate;
 
 /**
@@ -8,14 +9,19 @@ import java.time.LocalDate;
 public abstract class Printer {
     protected LocalDate currentDate;
 
-    protected String resultText = "";
-
     protected ColorFormat colorFormat;
+
+    protected PrintStream output;
 
     CalendarMonth calendarMonth;
 
     String textFormat;
-    String accentuationFormat;
+    String backgroundFormat;
+
+    Printer(LocalDate currentDate, PrintStream output){
+        this.output = output;
+        this.currentDate = currentDate;
+    }
 
     abstract void beginPrint();
 
@@ -30,6 +36,8 @@ public abstract class Printer {
     abstract void printMonthAndYear();
 
     protected void printWeekdayNames() {
+        beginWeek();
+
         for (Day day : calendarMonth.getWeekList().get(0).getDayList()) {
             if (day.isWeekend()) {
                 textFormat = colorFormat.getHolidayFormat();
@@ -40,43 +48,47 @@ public abstract class Printer {
             printWeekdayName(day);
         }
 
-        printLine();
+        endWeek();
     }
 
     protected void printDayNumbers() {
         for (Week week : calendarMonth.getWeekList()) {
+            beginWeek();
+
             for (Day day : week.getDayList()) {
                 setDefaultColorFormat();
 
-                if (day.isDayEqual(currentDate.getMonthValue(), currentDate.getDayOfMonth())) {
-                    accentuationFormat = colorFormat.getCurrentDayAccentuationFormat();
+                if (day.isSameDate(currentDate)) {
+                    backgroundFormat = colorFormat.getCurrentDayBackgroundFormat();
                 }
 
                 if (day.isWeekend()) {
                     textFormat = colorFormat.getHolidayFormat();
                 }
 
-                if (!day.isInMonth(calendarMonth.getMonthValue())) {
+                if (!day.isInMonth(calendarMonth.getMonth())) {
                     textFormat = colorFormat.getFromOtherMonthFormat();
                 }
 
                 printDayNumber(day);
             }
 
-            printLine();
+            endWeek();
         }
     }
 
     protected void setDefaultColorFormat(){
         textFormat = colorFormat.getDefaultFormat();
-        accentuationFormat = colorFormat.getDefaultAccentuationFormat();
+        backgroundFormat = colorFormat.getDefaultBackgroundFormat();
     }
 
     abstract void printWeekdayName(Day day);
 
     abstract void printDayNumber(Day day);
 
-    abstract void printLine();
+    abstract void beginWeek();
+
+    abstract void endWeek();
 
     abstract void endPrint();
 }

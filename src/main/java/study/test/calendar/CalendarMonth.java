@@ -2,7 +2,6 @@ package study.test.calendar;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +11,11 @@ import java.util.List;
 public class CalendarMonth {
     private List<Week> weekList = new ArrayList<Week>();
 
-    private Month monthName;
-    private int monthValue;
+    private Month month;
     private int year;
 
-    CalendarMonth(LocalDate date){
-        this.monthName = date.getMonth();
-        this.monthValue = date.getMonthValue();
+    CalendarMonth(LocalDate date) {
+        this.month = date.getMonth();
         this.year = date.getYear();
 
         date = leadDateToStartingPosition(date);
@@ -26,33 +23,37 @@ public class CalendarMonth {
         fillWeekList(date);
     }
 
-    private LocalDate leadDateToStartingPosition(LocalDate date){
+    private LocalDate leadDateToStartingPosition(LocalDate date) {
         date = date.minusDays(date.getDayOfMonth() - 1);
 
-        while(date.getDayOfWeek() != Week.FIRST_DAY_OF_WEEK){
+        while (!isFirstDayOfWeek(date)) {
             date = date.minusDays(1);
         }
 
         return date;
     }
 
-    private void fillWeekList(LocalDate date){
-        do{
+    private boolean isFirstDayOfWeek(LocalDate date) {
+        return date.getDayOfWeek().equals(Week.FIRST_DAY_OF_WEEK);
+    }
+
+    private void fillWeekList(LocalDate date) {
+        do {
             weekList.add(new Week(date));
-            date = date.plusDays(Week.MAX_WEEK_DAYS);
-        }while (date.getMonth() == monthName);
+            date = date.plusWeeks(1);
+        } while (date.getMonth() == month);
     }
 
     public List<Week> getWeekList() {
         return weekList;
     }
 
-    public Month getMonthName() {
-        return monthName;
+    public Month getMonth() {
+        return month;
     }
 
     public int getMonthValue() {
-        return monthValue;
+        return month.getValue();
     }
 
     public int getYear() {

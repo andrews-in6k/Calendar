@@ -1,5 +1,6 @@
 package study.test.calendar;
 
+import java.io.PrintStream;
 import java.time.LocalDate;
 
 public class Run {
@@ -9,7 +10,9 @@ public class Run {
     public static void main(String[] args) {
         CalendarMonth calendarMonth = new CalendarMonth(date);
 
-        Printer printer = new ANSIPrinter(date);
+        PrintStream printStream = new PrintStream(System.out);
+
+        Printer printer = new ANSIPrinter(date, printStream);
 
         printer.beginPrint();
         printer.printCalendar(calendarMonth);
