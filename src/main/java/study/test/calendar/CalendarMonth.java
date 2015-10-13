@@ -39,7 +39,7 @@ public class CalendarMonth {
     private void fillWeekList(LocalDate date){
         do{
             weekList.add(new Week(date));
-            date = date.plusWeeks(1);
+            date = date.plusDays(Week.MAX_WEEK_DAYS);
         }while (date.getMonth() == monthName);
     }
 
