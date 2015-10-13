@@ -11,12 +11,10 @@ import java.util.List;
 public class CalendarMonth {
     private List<Week> weekList = new ArrayList<Week>();
 
-    private Month month;
-    private int year;
+    private LocalDate date;
 
     CalendarMonth(LocalDate date) {
-        this.month = date.getMonth();
-        this.year = date.getYear();
+        this.date = date;
 
         date = leadDateToStartingPosition(date);
 
@@ -41,7 +39,7 @@ public class CalendarMonth {
         do {
             weekList.add(new Week(date));
             date = date.plusWeeks(1);
-        } while (date.getMonth() == month);
+        } while (date.getMonth() == getMonth());
     }
 
     public List<Week> getWeekList() {
@@ -49,15 +47,11 @@ public class CalendarMonth {
     }
 
     public Month getMonth() {
-        return month;
-    }
-
-    public int getMonthValue() {
-        return month.getValue();
+        return date.getMonth();
     }
 
     public int getYear() {
-        return year;
+        return date.getYear();
     }
 
 }
